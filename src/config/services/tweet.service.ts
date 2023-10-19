@@ -6,13 +6,22 @@ interface TweetRequest {
   token: string;
 }
 
+export interface TweetDTO {
+    id:string
+    userId:string
+	content:string
+    likes?:string[]
+    retweets?:string[]
+}
+
 export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
   try {
     const tweet = {
       content: objTweet.content,
       type: "tweet",
     };
-    const resposta = await apiService.post("/tweets", tweet, { headers: { Authorization: objTweet.token } });
+    const resposta = await apiService.post("/tweets", tweet, { 
+        headers: { Authorization: objTweet.token } });
     console.log(resposta);
     return {
       ok: resposta.data?.ok,
@@ -29,3 +38,25 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
     };
   }
 }
+
+export async function list(token:string){
+    try {
+        const resposta = await apiService.get('/tweets',{headers:{
+            Authorization:token
+        }})
+        return {
+            ok: resposta.data?.ok,
+            message: resposta.data?.message,
+            code: resposta.data?.code,
+            data: resposta.data?.data,
+          };
+    } catch (error:any) {
+        return {
+            ok: error.response.data?.ok,
+            message: error.response.data?.message,
+            code: error.response.data?.code,
+            data: error.response.data?.data,
+          };
+    }
+}
+
