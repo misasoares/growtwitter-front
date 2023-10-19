@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const BodyStyled = styled.div`
   display: flex;
-  justify-content: center;
+  
 `;
 
 function App() {
