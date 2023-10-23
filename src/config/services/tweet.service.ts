@@ -22,7 +22,7 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
     };
     const resposta = await apiService.post("/tweets", tweet, { 
         headers: { Authorization: objTweet.token } });
-    console.log(resposta);
+  
     return {
       ok: resposta.data?.ok,
       message: resposta.data?.message,

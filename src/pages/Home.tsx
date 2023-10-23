@@ -16,7 +16,7 @@ function Home() {
       navigate("/login");
       return;
     }
-  }, []);
+  });
 
   return (
     <>
