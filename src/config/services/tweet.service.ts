@@ -12,7 +12,6 @@ export interface TweetDTO {
   id: string;
   userId: string;
   content: string;
-  likes?: string[];
   retweets?: string[];
   User: UserDto;
   Likes:LikeDto[]
@@ -44,13 +43,9 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
   }
 }
 
-export async function list(token: string) {
+export async function list() {
   try {
-    const resposta = await apiService.get("/tweets", {
-      headers: {
-        Authorization: token,
-      },
-    });
+    const resposta = await apiService.get("/tweets");
     return {
       ok: resposta.data?.ok,
       message: resposta.data?.message,

@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ReactNode } from "react";
+
 import apiService from "./api.service";
 
 export interface LikeDto {
-  length?: ReactNode;
+
   id?:string
-  token?: string;
   tweetId?: string;
   retweetId?: string;
   userId?:string
@@ -13,16 +12,11 @@ export interface LikeDto {
 
 export async function createLike(data: LikeDto) {
   try {
-  
     const like = {
         tweetId:data.tweetId,
         retweetId: data.retweetId
     }
-    const resposta = await apiService.post("/likes", like,{
-        headers:{
-            Authorization:data.token
-        }
-    });
+    const resposta = await apiService.post("/likes", like);
 
 return {
     ok: resposta.data?.ok,
@@ -48,11 +42,7 @@ export async function deleteLike(data:LikeDto){
         id:data.id
     }
    
-    const resposta = await apiService.delete(`/likes/${like.id}`,{
-        headers:{
-            Authorization:data.token
-        }
-    });
+    const resposta = await apiService.delete(`/likes/${like.id}`);
 
 return {
     ok: resposta.data?.ok,
