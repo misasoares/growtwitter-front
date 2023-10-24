@@ -53,7 +53,7 @@ function Sidebar() {
           </p>
         </div>
 
-        <ButtonTweetar action={() => setOpenModal(true)} />
+        <ButtonTweetar type="button" action={() => setOpenModal(true)} />
       </SidebarStyled>
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)} />
     </BodySidebar>

@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ReactNode } from "react";
 import apiService from "./api.service";
 
 export interface LikeDto {
+  length?: ReactNode;
   id?:string
   token?: string;
   tweetId?: string;
   retweetId?: string;
+  userId?:string
 }
 
 export async function createLike(data: LikeDto) {
   try {
+  
     const like = {
         tweetId:data.tweetId,
         retweetId: data.retweetId
