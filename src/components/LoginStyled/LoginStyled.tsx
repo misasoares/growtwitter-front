@@ -37,3 +37,19 @@ export const SubmitStyled = styled.div`
   background-color: white;
   border-radius: 0px 8px 8px 0px;
 `;
+
+export const ButtonStyled = styled.button`
+  background-color: #1d9bf0;
+  border: none;
+  margin-top: 10px;
+  border-radius: 9px;
+  color: white;
+  padding: 8px;
+`;
+
+export const InputStyled = styled.input`
+  border: 1px solid rgb(221, 221, 221);
+  padding: 8px;
+  border-radius: 9px;
+  outline: none;
+`;

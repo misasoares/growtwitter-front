@@ -33,7 +33,7 @@ const Modal: React.FC<ModalPrimaryProps> = ({ isOpen, onClose }) => {
     }
 
     alert(resposta.message)
-   
+
   }
   if (isOpen) {
     return (

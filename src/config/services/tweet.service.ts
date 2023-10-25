@@ -14,7 +14,7 @@ export interface TweetDTO {
   content: string;
   retweets?: string[];
   User: UserDto;
-  Likes:LikeDto[]
+  Likes: LikeDto[];
 }
 
 export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
@@ -28,14 +28,12 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
     });
 
     return {
-      ok: resposta.data?.ok,
       message: resposta.data?.message,
       code: resposta.data?.code,
       data: resposta.data?.data,
     };
   } catch (error: any) {
     return {
-      ok: error.response.data?.ok,
       message: error.response.data?.message,
       code: error.response.data?.code,
       data: error.response.data?.data,

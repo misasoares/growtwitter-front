@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import React from "react";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import Cadastro from "../pages/Cadastro";
 
 
 const router = createBrowserRouter([
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
     path:'/login',
     element: <Login/>,
     errorElement: <h1>NOT FOUND</h1>
+  },{
+    path:'/cadastro',
+    element:<Cadastro/>,
+    errorElement:<h1>NOT FOUND</h1>
   }
 
 ]);

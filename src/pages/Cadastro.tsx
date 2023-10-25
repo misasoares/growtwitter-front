@@ -1,29 +1,34 @@
 import { ButtonStyled, ContainerStyled, InputStyled, MainStyled, SectionStyled, SubmitStyled } from "../components/LoginStyled/LoginStyled";
-import { login } from "../config/services/auth.service";
 import { useNavigate } from "react-router-dom";
+import { create } from "../config/services/user.service";
 
-function Login() {
+function Cadastro() {
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const user = {
+      name: e.currentTarget.nome.value,
+      email: e.currentTarget.email.value,
       username: e.currentTarget.username.value,
       password: e.currentTarget.password.value,
     };
     console.log(user);
 
-    const resposta = await login(user);
+    const resposta = await create(user);
 
-    if (resposta.code !== 200) {
-      alert("Username ou senha incorretos.");
+  
+
+    if (resposta.code !== 201) {
+      alert(resposta.message);
       return;
     }
 
-    if (resposta.code === 200) {
-      localStorage.setItem("token", resposta.data.token);
 
-      navigate("/");
+
+    if (resposta.code === 201) {
+        alert("Cadastrado com sucesso.")
+      navigate("/login");
     }
   }
 
@@ -40,8 +45,18 @@ function Login() {
         </SectionStyled>
 
         <SubmitStyled>
-          <h2>Entrar no Growtwitter</h2>
+          <h2>Cadastre-se</h2>
           <form onSubmit={(e) => handleSubmit(e)} style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
+            <label style={{ color: " rgb(136, 136, 136)" }} htmlFor="nome">
+              nome
+            </label>
+            <InputStyled type="text" name="nome"  />
+
+            <label style={{ color: " rgb(136, 136, 136)" }} htmlFor="email">
+              email
+            </label>
+            <InputStyled type="text" name="email" />
+
             <label style={{ color: " rgb(136, 136, 136)" }} htmlFor="username">
               Username
             </label>
@@ -52,7 +67,7 @@ function Login() {
             </label>
             <InputStyled type="text" name="password" />
 
-            <ButtonStyled type="submit">Entrar</ButtonStyled>
+            <ButtonStyled type="submit">Cadastrar-se</ButtonStyled>
           </form>
         </SubmitStyled>
       </ContainerStyled>
@@ -60,4 +75,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Cadastro;
