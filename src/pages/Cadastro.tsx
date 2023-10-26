@@ -65,7 +65,7 @@ function Cadastro() {
             <label style={{ color: " rgb(136, 136, 136)" }} htmlFor="password">
               password
             </label>
-            <InputStyled type="text" name="password" />
+            <InputStyled type="password" name="password" />
 
             <ButtonStyled type="submit">Cadastrar-se</ButtonStyled>
           </form>

@@ -25,6 +25,15 @@ const SidebarStyled = styled.div`
   align-items: center;
 `;
 
+const ButtonLogout = styled.button`
+  background-color: #f01d1d;
+  border: none;
+  padding: 7px;
+  border-radius: 30px;
+  width: 150px;
+  color: white;
+`;
+
 function Sidebar() {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
@@ -36,6 +45,11 @@ function Sidebar() {
       return;
     }
   }, []);
+
+  function deslogar() {
+    localStorage.removeItem("token");
+    navigate("/login");
+  }
 
   return (
     <BodySidebar>
@@ -54,8 +68,9 @@ function Sidebar() {
         </div>
 
         <ButtonTweetar type="button" action={() => setOpenModal(true)} />
+        <ButtonLogout onClick={deslogar}>sair</ButtonLogout>
       </SidebarStyled>
-      <Modal isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <Modal isOpen={openModal} tweet={null} type="tweet" onClose={() => setOpenModal(false)} />
     </BodySidebar>
   );
 }

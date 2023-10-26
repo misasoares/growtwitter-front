@@ -3,7 +3,7 @@ import { TweetDTO, list } from "../../config/services/tweet.service";
 import { useEffect, useState } from "react";
 import { createLike, deleteLike } from "../../config/services/like.service";
 import { listMe } from "../../config/services/user.service";
-
+import Modal from "../Modal/Modal";
 
 const BodyTimeline = styled.div`
   border: 2px solid #e0e0e0;
@@ -17,7 +17,8 @@ const HrStyled = styled.hr`
 export default function Timeline() {
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [userLogado, setUserLogado] = useState("");
-
+  const [openModal, setOpenModal] = useState(false);
+  const [tweetModal, setTweetModal] = useState<TweetDTO | null>(null);
 
   useEffect(() => {
     async function me() {
@@ -83,7 +84,12 @@ export default function Timeline() {
     }
   }
 
+  function showModal(tweet: TweetDTO) {
+    setTweetModal(tweet);
+    setOpenModal(true);
+  }
 
+  console.log(tweets[2]);
 
   return (
     <BodyTimeline>
@@ -94,8 +100,14 @@ export default function Timeline() {
           return (
             <div key={index}>
               <div style={{ marginLeft: "10px" }}>
+                {/* TESTE DO RETORNO DOS RETWEETS */}
+                <h3>RETWEET CONTENT: {t.Retweet[0]?.content}</h3>
+                  {/* TESTE DO RETORNO DOS RETWEETS */}
                 <div style={{ display: "flex" }}>
-                  <p style={{ marginRight: "10px" }}>{t.User.name}</p>
+
+                  <p style={{ marginRight: "10px" }}>
+                    <strong>{t.User.name}</strong>
+                  </p>
                   <p>{t.User.username}</p>
                 </div>
                 <p>{t.content}</p>
@@ -116,7 +128,7 @@ export default function Timeline() {
 
                   <p style={{ marginLeft: "5px", marginRight: "8px" }}>{t.Likes.length}</p>
 
-                  <svg  width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={()=>alert("TO DO")}>
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => showModal(t)}>
                     <g clipPath="url(#clip0_83_2269)">
                       <path
                         d="M5.48279 10.9956C4.24557 10.9956 3.00749 11.0034 1.77027 10.9931C0.636876 10.9836 0.0597954 10.4413 0.00961455 9.33704C-0.0128803 8.85235 0.0234576 8.36423 0.00096267 7.87954C-0.0198018 7.43181 0.229372 7.36821 0.595347 7.37251C0.941422 7.37681 1.23126 7.38368 1.20011 7.85634C1.17589 8.22587 1.19146 8.5997 1.19838 8.97095C1.21396 9.75813 1.2477 9.80024 2.02723 9.80454C3.49459 9.81227 4.96282 9.80712 6.43017 9.80712C7.32218 9.80712 8.21419 9.81743 9.1062 9.80282C9.73692 9.79251 9.77499 9.74352 9.79576 9.09985C9.8096 8.67188 9.81739 8.2422 9.80181 7.81423C9.78624 7.3897 10.0501 7.37079 10.3642 7.37852C10.6895 7.38626 11.0165 7.35274 10.9992 7.84087C10.9802 8.38313 11.0148 8.92798 10.9854 9.46938C10.9343 10.4242 10.3529 10.9759 9.36749 10.9905C8.07317 11.0094 6.77798 10.9948 5.48279 10.9956Z"
@@ -133,13 +145,13 @@ export default function Timeline() {
                       </clipPath>
                     </defs>
                   </svg>
-                  
                 </div>
               </div>
               <HrStyled />
             </div>
           );
         })}
+      <Modal isOpen={openModal} tweet={tweetModal} type="retweet" onClose={() => setOpenModal(false)} />
     </BodyTimeline>
   );
 }

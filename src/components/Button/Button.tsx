@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 interface ButtonPrimaryProps {
   action?: () => void;
-  type:"submit"|"button"
+  type: "submit" | "button";
 }
 
 const ButtonStyled = styled.button`
@@ -11,10 +11,17 @@ const ButtonStyled = styled.button`
   padding: 7px;
   border-radius: 30px;
   width: 150px;
+  color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const ButtonTweetar: React.FC<ButtonPrimaryProps> = ({ action, type }) => {
-  return <ButtonStyled type={type} onClick={action}>Tweetar</ButtonStyled>;
+  return (
+    <ButtonStyled type={type} onClick={action}>
+      Tweetar
+    </ButtonStyled>
+  );
 };
 
 export default ButtonTweetar;

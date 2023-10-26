@@ -50,12 +50,12 @@ function Login() {
             <label style={{ color: " rgb(136, 136, 136)" }} htmlFor="password">
               password
             </label>
-            <InputStyled type="text" name="password" />
-
+            <InputStyled type="password" name="password" />
             <ButtonStyled type="submit">Entrar</ButtonStyled>
           </form>
         </SubmitStyled>
       </ContainerStyled>
+             
     </MainStyled>
   );
 }

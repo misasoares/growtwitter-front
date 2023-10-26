@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import apiService, { ResponseAPI } from "./api.service";
 import { LikeDto } from "./like.service";
+import { RetweetShow } from "./retweet.service";
 import { UserDto } from "./user.service";
 
 interface TweetRequest {
   content: string;
-  token: string;
 }
 
 export interface TweetDTO {
@@ -15,6 +15,7 @@ export interface TweetDTO {
   retweets?: string[];
   User: UserDto;
   Likes: LikeDto[];
+  Retweet: RetweetShow[]
 }
 
 export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
@@ -23,9 +24,7 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
       content: objTweet.content,
       type: "tweet",
     };
-    const resposta = await apiService.post("/tweets", tweet, {
-      headers: { Authorization: objTweet.token },
-    });
+    const resposta = await apiService.post("/tweets", tweet);
 
     return {
       message: resposta.data?.message,
