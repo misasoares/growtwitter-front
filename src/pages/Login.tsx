@@ -1,6 +1,17 @@
+import styled from "styled-components";
 import { ButtonStyled, ContainerStyled, InputStyled, MainStyled, SectionStyled, SubmitStyled } from "../components/LoginStyled/LoginStyled";
 import { login } from "../config/services/auth.service";
 import { useNavigate } from "react-router-dom";
+
+const ButtonToSignup = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #1d9bf0;
+  text-align: left;
+  text-decoration: underline;
+`
 
 function Login() {
   const navigate = useNavigate();
@@ -25,6 +36,10 @@ function Login() {
 
       navigate("/");
     }
+  }
+
+  function navToSignup(){
+    navigate('/cadastro')
   }
 
   return (
@@ -53,6 +68,7 @@ function Login() {
             <InputStyled type="password" name="password" />
             <ButtonStyled type="submit">Entrar</ButtonStyled>
           </form>
+          <p>Não tem conta? <ButtonToSignup onClick={navToSignup}>Cadastre-se</ButtonToSignup></p>
         </SubmitStyled>
       </ContainerStyled>
              

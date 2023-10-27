@@ -1,28 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import apiService, { ResponseAPI } from "./api.service";
 import { LikeDto } from "./like.service";
-import { RetweetShow } from "./retweet.service";
 import { UserDto } from "./user.service";
 
 interface TweetRequest {
   content: string;
+  type: "tweet" | "retweet";
+  tweetId?: string 
 }
 
 export interface TweetDTO {
+  [x: string]: any;
   id: string;
   userId: string;
   content: string;
-  retweets?: string[];
+  retweets: TweetDTO[]
   User: UserDto;
   Likes: LikeDto[];
-  Retweet: RetweetShow[]
+  originalTweet: TweetDTO
+  type: "tweet" | "retweet"
 }
 
 export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
   try {
     const tweet = {
       content: objTweet.content,
-      type: "tweet",
+      type: objTweet.type,
+      originalTweetId: objTweet.tweetId,
     };
     const resposta = await apiService.post("/tweets", tweet);
 

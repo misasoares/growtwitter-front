@@ -12,6 +12,7 @@ export const MainStyled = styled.div`
 export const ContainerStyled = styled.div`
   display: flex;
   max-width: 80vw;
+  min-height: 30vh;
   max-height: 80vh;
 `;
 
@@ -36,6 +37,7 @@ export const SubmitStyled = styled.div`
   min-width: 250px;
   background-color: white;
   border-radius: 0px 8px 8px 0px;
+  padding-bottom: 20px;
 `;
 
 export const ButtonStyled = styled.button`

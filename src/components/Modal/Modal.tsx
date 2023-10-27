@@ -3,45 +3,39 @@ import ButtonTweetar from "../../components/Button/Button";
 import X from "../../images/X.svg";
 import { TweetDTO, create } from "../../config/services/tweet.service";
 import { BackgroundStyle, DivCampoTweet, FormStyled, IconeXStyled, ModalStyle, TextAreaContentStyled } from "./Modal.style";
-import { createRetweet } from "../../config/services/retweet.service";
 
 interface ModalPrimaryProps {
   isOpen: boolean;
   onClose: () => void;
   type: "tweet" | "retweet";
-  tweet: TweetDTO | null;
+  tweet?: TweetDTO;
 }
 
 const Modal: React.FC<ModalPrimaryProps> = ({ isOpen, onClose, type, tweet }) => {
+
+
   useEffect(() => {
     console.log(tweet);
   }, [tweet]);
-
+console.log(tweet)
   async function criarTweet(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (type === "tweet") {
-      const tweet = {
+    
+      const tweetCreate = {
         content: e.currentTarget.content.value,
+        type:type,
+        tweetId: tweet?.id
       };
 
-      const resposta = await create(tweet);
+
+      const resposta = await create(tweetCreate);
       if (resposta.code === 201) {
         onClose();
       }
 
       alert(resposta.message);
-    } else {
-      const retweet = {
-        content: e.currentTarget.content.value as string,
-        tweetId: tweet!.id,
-      };
-      const resposta = await createRetweet(retweet);
-
-      if (resposta.code === 201) {
-        onClose();
-      }
-    }
+    
   }
   if (isOpen) {
     return (

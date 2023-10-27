@@ -37,6 +37,7 @@ const ButtonLogout = styled.button`
 function Sidebar() {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+ 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -50,6 +51,8 @@ function Sidebar() {
     localStorage.removeItem("token");
     navigate("/login");
   }
+
+
 
   return (
     <BodySidebar>
@@ -70,7 +73,7 @@ function Sidebar() {
         <ButtonTweetar type="button" action={() => setOpenModal(true)} />
         <ButtonLogout onClick={deslogar}>sair</ButtonLogout>
       </SidebarStyled>
-      <Modal isOpen={openModal} tweet={null} type="tweet" onClose={() => setOpenModal(false)} />
+      <Modal isOpen={openModal} tweet={undefined} type="tweet" onClose={() => setOpenModal(false)} />
     </BodySidebar>
   );
 }
