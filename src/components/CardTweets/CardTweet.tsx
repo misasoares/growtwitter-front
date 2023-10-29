@@ -75,7 +75,7 @@ interface CardTweetProp {
   iconePerfil: string | null;
 }
 
-const IconeStyled = styled.div<{ imgurl: string }>`
+export const IconeStyled = styled.div<{ imgurl: string }>`
   width: 70px;
   height: 70px;
   display: flex;
@@ -108,8 +108,7 @@ const FlexContainer = styled.div`
 export default function CardTweet(props: CardTweetProp) {
   const userAvatarUrl = `https://www.gravatar.com/avatar/${props.iconePerfilUser}?d=robohash`;
   const avatarRetweetUrl = `https://www.gravatar.com/avatar/${props.iconePerfil}?d=robohash`;
-console.log(avatarRetweetUrl)
-console.log("------------------")
+
   return (
     <CardContainer key={props.index}>
       <FlexContainer>

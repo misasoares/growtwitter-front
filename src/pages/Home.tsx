@@ -1,39 +1,31 @@
-
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Timeline from "../components/Timeline/Timeline";
-import { UserDto } from "../config/services/user.service";
-
-
+import { UserDto, listMe } from "../config/services/user.service";
 
 function Home() {
   const navigate = useNavigate();
   const [userLogado, setUserLogado] = useState<UserDto>();
-  
 
   useEffect(() => {
-
-    async function me() {
-      const res = await listMe();
-
-      setUserLogado(res.data);
-    }
-
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
       return;
     }
+    async function me() {
+      const res = await listMe();
 
-    me()
-  });
+      setUserLogado(res.data);
+    }
+    me();
+  }, [navigate]);
 
   return (
     <>
-    <Sidebar/>
-    <Timeline/>
-    
+      <Sidebar userLogado={userLogado} />
+      <Timeline userLogado={userLogado} />
     </>
   );
 }

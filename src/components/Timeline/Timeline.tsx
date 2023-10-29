@@ -23,12 +23,12 @@ const HrStyled = styled.hr`
 `;
 
 interface TimeLineProp {
-  userLogado: UserDto;
+  userLogado?: UserDto | null;
 }
 
 export default function Timeline(props: TimeLineProp) {
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
-  const [userLogado, setUserLogado] = useState<UserDto>();
+  const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [openModal, setOpenModal] = useState(false);
   const [tweetModal, setTweetModal] = useState<TweetDTO | undefined>(undefined);
   const [copyTweets, setCopyTweets] = useState<object>({});

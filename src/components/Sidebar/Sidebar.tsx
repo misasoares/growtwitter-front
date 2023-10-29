@@ -7,6 +7,7 @@ import ButtonTweetar from "../Button/Button";
 import Modal from "../../components/Modal/Modal";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserDto } from "../../config/services/user.service";
 
 const BodySidebar = styled.div`
   display: flex;
@@ -34,25 +35,45 @@ const ButtonLogout = styled.button`
   color: white;
 `;
 
-function Sidebar() {
+export const IconeStyled = styled.div<{ imgurl: string }>`
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  border-radius: 50%;
+  border: 2px solid #1d9bf0;
+  background-color: #fd924b;
+  background-image: url(${(props) => props.imgurl});
+  background-size: cover;
+  background-position: center;
+  margin-right: 10px;
+`;
+
+interface SidebarLineProp {
+  userLogado?: UserDto;
+}
+
+function Sidebar(props: SidebarLineProp) {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
- 
+  const [userLogado, setUserLogado] = useState<UserDto | null>();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    setUserLogado(props.userLogado);
     if (!token) {
       navigate("/login");
       return;
     }
-  }, []);
+  }, [navigate, props.userLogado]);
 
   function deslogar() {
     localStorage.removeItem("token");
     navigate("/login");
   }
 
-
+  const userAvatarUrl = `https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`;
 
   return (
     <BodySidebar>
@@ -72,6 +93,7 @@ function Sidebar() {
 
         <ButtonTweetar type="button" action={() => setOpenModal(true)} />
         <ButtonLogout onClick={deslogar}>sair</ButtonLogout>
+        <IconeStyled imgurl={props.userLogado === undefined ? "https://www.gravatar.com/avatar/?d=blank" : userAvatarUrl}></IconeStyled>
       </SidebarStyled>
       <Modal isOpen={openModal} tweet={undefined} type="tweet" onClose={() => setOpenModal(false)} />
     </BodySidebar>
