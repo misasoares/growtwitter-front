@@ -7,6 +7,7 @@ export interface UserDto {
   name: string;
   username: string;
   LikesToUser: LikeDto[];
+  iconePerfil:string
 }
 
 interface CreateUser {

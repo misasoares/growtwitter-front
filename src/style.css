@@ -9,3 +9,15 @@ h1 {
 h2 {
   font-size: 1.5em;
 }
+
+
+.icon-background {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  border-radius: 50%;
+  border: 2px solid #1d9bf0;
+  background-color: #fd924b;
+}
