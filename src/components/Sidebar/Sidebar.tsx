@@ -31,8 +31,11 @@ const ButtonLogout = styled.button`
   border: none;
   padding: 7px;
   border-radius: 30px;
-  width: 150px;
+  width: 60px;
   color: white;
+  position: absolute;
+  bottom: 10px; 
+
 `;
 
 export const IconeStyled = styled.div<{ imgurl: string }>`
@@ -40,7 +43,7 @@ export const IconeStyled = styled.div<{ imgurl: string }>`
   height: 70px;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   border-radius: 50%;
   border: 2px solid #1d9bf0;
   background-color: #fd924b;
@@ -48,6 +51,10 @@ export const IconeStyled = styled.div<{ imgurl: string }>`
   background-size: cover;
   background-position: center;
   margin-right: 10px;
+  position: absolute;
+  bottom: 50px; 
+  
+  
 `;
 
 interface SidebarLineProp {
@@ -66,7 +73,7 @@ function Sidebar(props: SidebarLineProp) {
       navigate("/login");
       return;
     }
-  }, [navigate, props.userLogado]);
+  }, [navigate, props.userLogado, openModal]);
 
   function deslogar() {
     localStorage.removeItem("token");

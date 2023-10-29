@@ -42,7 +42,7 @@ export default function Timeline(props: TimeLineProp) {
     }
 
     listarTweets();
-  }, [copyTweets]);
+  }, [copyTweets, props.userLogado]);
 
   async function like(tweetId: string, index: number) {
     const userLiked = tweets[index].Likes.some((like) => like.userId === userLogado!.id);
