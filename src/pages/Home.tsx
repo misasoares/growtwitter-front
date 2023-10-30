@@ -5,14 +5,18 @@ import Timeline from "../components/Timeline/Timeline";
 import { UserDto, listMe } from "../config/services/user.service";
 import Perfil from "../components/Perfil/Perfil";
 import { TweetDTO, list } from "../config/services/tweet.service";
+import logo from "../images/logo_growtweet.svg";
+import iconePaginaInicialSelecionado from "../images/icone_pagina inicial_selecionado.svg";
+import iconeExplorar from "../images/icone_explorar.svg";
+import iconePerfil from "../images/icone_perfil.svg";
 
 function Home() {
   const navigate = useNavigate();
   const [userLogado, setUserLogado] = useState<UserDto>();
   const [loading, setLoading] = useState(false);
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
-  const [showPerfil, setShowPerfil] = useState(false)
-  const [showTimeline, setShowTimeline] = useState(true)
+  const [showPerfil, setShowPerfil] = useState(false);
+  // const [showTimeline, setShowTimeline] = useState(true)
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,7 +27,6 @@ function Home() {
     setLoading(true);
     async function me() {
       const res = await listMe();
-
       setUserLogado(res.data);
     }
 
@@ -37,17 +40,25 @@ function Home() {
       setLoading(false);
     }
 
-    listarTweets();
-
     me();
-  }, [navigate]);
+    listarTweets();
+  }, [navigate, showPerfil]);
+
+  function handleShowPerfil(show: boolean) {
+    setShowPerfil(show);
+  }
 
   return (
     <>
-      <Sidebar userLogado={userLogado} />
-      {showPerfil ? <Perfil userLogado={userLogado}/>:
-       <Timeline userLogado={userLogado} tweets={tweets} loading={loading} />
-      }
+      <Sidebar
+        showPerfil={handleShowPerfil}
+        userLogado={userLogado}
+        logo={logo}
+        iconePerfil={iconePerfil}
+        iconeExplorar={iconeExplorar}
+        iconePaginaInicialSelecionado={iconePaginaInicialSelecionado}
+      />
+      {showPerfil ? <Perfil userLogado={userLogado} /> : <Timeline userLogado={userLogado} tweets={tweets} loading={loading} />}
     </>
   );
 }

@@ -7,7 +7,6 @@ import Modal from "../Modal/Modal";
 import CardTweet from "../CardTweets/CardTweet";
 import { Box, CircularProgress } from "@mui/material";
 
-
 const BodyTimeline = styled.div`
   border: 2px solid #e0e0e0;
   width: 60%;
@@ -26,8 +25,8 @@ const HrStyled = styled.hr`
 
 interface TimeLineProp {
   userLogado?: UserDto | null;
-  loading?: boolean
-  tweets?: TweetDTO[]
+  loading?: boolean;
+  tweets: TweetDTO[];
 }
 
 export default function Timeline(props: TimeLineProp) {
@@ -35,24 +34,22 @@ export default function Timeline(props: TimeLineProp) {
   const [openModal, setOpenModal] = useState(false);
   const [tweetModal, setTweetModal] = useState<TweetDTO | undefined>(undefined);
   const [copyTweets, setCopyTweets] = useState<object>({});
-
-
+  const [tweets, setTweets] = useState<TweetDTO[]>();
 
   useEffect(() => {
-
     setUserLogado(props.userLogado);
-
-  }, [copyTweets, props.userLogado, props.loading]);
+    setTweets(props.tweets);
+  }, [copyTweets, props.userLogado, props.loading, props.tweets]);
 
   async function like(tweetId: string, index: number) {
-    const userLiked = tweets[index].Likes.some((like) => like.userId === userLogado!.id);
+    const userLiked = props.tweets[index].Likes.some((like) => like.userId === userLogado!.id);
 
     if (!userLiked) {
       const dataCreate = {
         tweetId: tweetId,
       };
 
-      const copy = [...tweets];
+      const copy = [...props.tweets];
       copy[index].Likes.push({
         id: "",
         tweetId: "",
@@ -64,8 +61,8 @@ export default function Timeline(props: TimeLineProp) {
 
       const criarLike = await createLike(dataCreate);
 
-      const indexLike = tweets[index].Likes.findIndex((l) => l.userId === userLogado);
-      const copy2 = [...tweets];
+      const indexLike = tweets![index].Likes.findIndex((l) => l.userId === userLogado);
+      const copy2 = [...tweets!];
       copy[index].Likes[indexLike] = {
         id: criarLike.data.id,
         tweetId: criarLike.data.tweetId,
@@ -76,13 +73,13 @@ export default function Timeline(props: TimeLineProp) {
 
       console.log(criarLike);
     } else {
-      const indexLike = tweets[index].Likes.findIndex((l) => l.userId === userLogado!.id);
+      const indexLike = tweets![index].Likes.findIndex((l) => l.userId === userLogado!.id);
 
       const dataToDelete = {
-        id: tweets[index].Likes[indexLike].id,
+        id: tweets![index].Likes[indexLike].id,
       };
 
-      const copy = [...tweets];
+      const copy = [...tweets!];
       copy[index].Likes.splice(indexLike, 1);
       setTweets(copy);
 
@@ -107,11 +104,13 @@ export default function Timeline(props: TimeLineProp) {
 
   return (
     <BodyTimeline>
-      {props.loading ? (<>
-        <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
-          <CircularProgress />
-        </Box>
-      </>) :
+      {props.loading ? (
+        <>
+          <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
+            <CircularProgress />
+          </Box>
+        </>
+      ) : (
         <TimeLineStyled>
           {props.tweets &&
             props.tweets.map((t, index) => (
@@ -158,9 +157,7 @@ export default function Timeline(props: TimeLineProp) {
               </div>
             ))}
         </TimeLineStyled>
-      }
-
-
+      )}
 
       <Modal isOpen={openModal} tweet={tweetModal} type="retweet" onClose={() => hideModal()} />
     </BodyTimeline>

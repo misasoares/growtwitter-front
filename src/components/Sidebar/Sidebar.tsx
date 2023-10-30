@@ -1,8 +1,4 @@
-import logo from "../../images/logo_growtweet.svg";
-import iconePaginaInicialSelecionado from "../../images/icone_pagina inicial_selecionado.svg";
 import styled from "styled-components";
-import iconeExplorar from "../../images/icone_explorar.svg";
-import iconePerfil from "../../images/icone_perfil.svg";
 import ButtonTweetar from "../Button/Button";
 import Modal from "../../components/Modal/Modal";
 import { useState, useEffect } from "react";
@@ -57,11 +53,16 @@ export const IconeStyled = styled.div<{ imgurl: string }>`
   
 `;
 
-interface SidebarLineProp {
+interface SidebarProp {
   userLogado?: UserDto;
+  logo:string
+  iconePaginaInicialSelecionado:string
+  iconeExplorar:string
+  iconePerfil:string
+  showPerfil: (show:boolean)=> void
 }
 
-function Sidebar(props: SidebarLineProp) {
+function Sidebar(props: SidebarProp) {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [userLogado, setUserLogado] = useState<UserDto | null>();
@@ -80,21 +81,31 @@ function Sidebar(props: SidebarLineProp) {
     navigate("/login");
   }
 
+  function handleIconClkick(icon:string){
+    if(icon === props.iconePerfil){
+      props.showPerfil(true)
+    }else{
+      props.showPerfil(false)
+      
+    }
+  }
+
+
   const userAvatarUrl = `https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`;
 
   return (
     <BodySidebar>
       <SidebarStyled>
         <div>
-          <img src={logo} alt="icone growtweet" />
-          <p>
-            <img src={iconePaginaInicialSelecionado} alt="icone pagina inicial selecionado" /> Página Inicial
+          <img src={props.logo} alt="icone growtweet" />
+          <p onClick={()=>handleIconClkick(props.iconePaginaInicialSelecionado)}>
+            <img  src={props.iconePaginaInicialSelecionado} alt="icone pagina inicial selecionado" /> Página Inicial
           </p>
           <p>
-            <img src={iconeExplorar} alt="icone explorar" /> Explorar
+            <img src={props.iconeExplorar} alt="icone explorar" /> Explorar
           </p>
-          <p>
-            <img src={iconePerfil}  alt="icone perfil" /> Perfil
+          <p onClick={()=>handleIconClkick(props.iconePerfil)}>
+            <img src={props.iconePerfil}  alt="icone perfil" /> Perfil
           </p>
         </div>
 
