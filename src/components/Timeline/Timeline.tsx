@@ -1,10 +1,17 @@
 import styled from "styled-components";
 import { TweetDTO, list } from "../../config/services/tweet.service";
-import { useEffect, useState } from "react";
+import { useEffect, useState, CSSProperties  } from "react";
 import { createLike, deleteLike } from "../../config/services/like.service";
 import { UserDto } from "../../config/services/user.service";
 import Modal from "../Modal/Modal";
 import CardTweet from "../CardTweets/CardTweet";
+import { ClipLoader } from "react-spinners";
+
+const override: CSSProperties = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
 
 const BodyTimeline = styled.div`
   border: 2px solid #e0e0e0;
@@ -32,13 +39,17 @@ export default function Timeline(props: TimeLineProp) {
   const [openModal, setOpenModal] = useState(false);
   const [tweetModal, setTweetModal] = useState<TweetDTO | undefined>(undefined);
   const [copyTweets, setCopyTweets] = useState<object>({});
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
+   
     setUserLogado(props.userLogado);
 
     async function listarTweets() {
       const res = await list();
       setTweets(res.data);
+      setLoading(false)
     }
 
     listarTweets();
@@ -107,6 +118,14 @@ export default function Timeline(props: TimeLineProp) {
 
   return (
     <BodyTimeline>
+      {loading ? <ClipLoader
+        color='#ff0000'
+        loading={loading}
+        cssOverride={override}
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      /> :
       <TimeLineStyled>
         {tweets &&
           tweets.map((t, index) => (
@@ -153,6 +172,8 @@ export default function Timeline(props: TimeLineProp) {
             </div>
           ))}
       </TimeLineStyled>
+      }
+      
       <Modal isOpen={openModal} tweet={tweetModal} type="retweet" onClose={() => hideModal()} />
     </BodyTimeline>
   );

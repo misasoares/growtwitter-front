@@ -2,6 +2,15 @@ import styled from "styled-components";
 import { ButtonStyled, ContainerStyled, InputStyled, MainStyled, SectionStyled, SubmitStyled } from "../components/LoginStyled/LoginStyled";
 import { login } from "../config/services/auth.service";
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
+import { CSSProperties, useState } from "react";
+
+const override: CSSProperties = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
+
 
 const ButtonToSignup = styled.button`
   background: none;
@@ -15,16 +24,22 @@ const ButtonToSignup = styled.button`
 
 function Login() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
+
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     const user = {
       username: e.currentTarget.username.value,
       password: e.currentTarget.password.value,
     };
     console.log(user);
 
+
+    setLoading(true)
     const resposta = await login(user);
+    setLoading(false)
 
     if (resposta.code !== 200) {
       alert("Username ou senha incorretos.");
@@ -44,6 +59,14 @@ function Login() {
 
   return (
     <MainStyled>
+      {loading ? <ClipLoader
+        color='#ff0000'
+        loading={loading}
+        cssOverride={override}
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      /> : 
       <ContainerStyled>
         <SectionStyled>
           <h1>Growtwitter</h1>
@@ -71,6 +94,8 @@ function Login() {
           <p>Não tem conta? <ButtonToSignup onClick={navToSignup}>Cadastre-se</ButtonToSignup></p>
         </SubmitStyled>
       </ContainerStyled>
+      }
+      
              
     </MainStyled>
   );
