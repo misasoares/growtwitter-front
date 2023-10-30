@@ -94,7 +94,7 @@ function Sidebar(props: SidebarLineProp) {
             <img src={iconeExplorar} alt="icone explorar" /> Explorar
           </p>
           <p>
-            <img src={iconePerfil} alt="icone perfil" /> Perfil
+            <img src={iconePerfil}  alt="icone perfil" /> Perfil
           </p>
         </div>
 

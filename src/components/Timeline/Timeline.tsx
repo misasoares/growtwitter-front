@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { TweetDTO, list } from "../../config/services/tweet.service";
+import { TweetDTO } from "../../config/services/tweet.service";
 import { useEffect, useState } from "react";
 import { createLike, deleteLike } from "../../config/services/like.service";
 import { UserDto } from "../../config/services/user.service";
 import Modal from "../Modal/Modal";
 import CardTweet from "../CardTweets/CardTweet";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import { Box, CircularProgress } from "@mui/material";
+
 
 const BodyTimeline = styled.div`
   border: 2px solid #e0e0e0;
@@ -26,33 +26,23 @@ const HrStyled = styled.hr`
 
 interface TimeLineProp {
   userLogado?: UserDto | null;
+  loading?: boolean
+  tweets?: TweetDTO[]
 }
 
 export default function Timeline(props: TimeLineProp) {
-  const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [openModal, setOpenModal] = useState(false);
   const [tweetModal, setTweetModal] = useState<TweetDTO | undefined>(undefined);
   const [copyTweets, setCopyTweets] = useState<object>({});
-  const [loading, setLoading] = useState(false);
+
+
 
   useEffect(() => {
-    setLoading(true);
 
     setUserLogado(props.userLogado);
 
-    async function listarTweets() {
-      const res = await list();
-
-      if (res.code !== 200) {
-        alert("Algo deu errado, atualize a página.");
-      }
-      setTweets(res.data);
-      setLoading(false);
-    }
-
-    listarTweets();
-  }, [copyTweets, props.userLogado]);
+  }, [copyTweets, props.userLogado, props.loading]);
 
   async function like(tweetId: string, index: number) {
     const userLiked = tweets[index].Likes.some((like) => like.userId === userLogado!.id);
@@ -117,16 +107,14 @@ export default function Timeline(props: TimeLineProp) {
 
   return (
     <BodyTimeline>
-      {loading ? (
-        <>
-          <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
-            <CircularProgress />
-          </Box>
-        </>
-      ) : (
+      {props.loading ? (<>
+        <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
+          <CircularProgress />
+        </Box>
+      </>) :
         <TimeLineStyled>
-          {tweets &&
-            tweets.map((t, index) => (
+          {props.tweets &&
+            props.tweets.map((t, index) => (
               <div key={index} style={{ padding: "10px 0px 0px 10px" }}>
                 <CardTweet iconePerfilUser={t.User.iconePerfil} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : null} index={index} tweet={t} key={index} />
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -170,7 +158,9 @@ export default function Timeline(props: TimeLineProp) {
               </div>
             ))}
         </TimeLineStyled>
-      )}
+      }
+
+
 
       <Modal isOpen={openModal} tweet={tweetModal} type="retweet" onClose={() => hideModal()} />
     </BodyTimeline>
