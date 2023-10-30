@@ -73,7 +73,7 @@ function Sidebar(props: SidebarLineProp) {
       navigate("/login");
       return;
     }
-  }, [navigate, props.userLogado, openModal]);
+  }, [navigate, props.userLogado]);
 
   function deslogar() {
     localStorage.removeItem("token");
