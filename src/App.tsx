@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 const BodyStyled = styled.div`
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  width: 98vw;
+  height: 98vh;
 `;
 
 function App() {

@@ -23,12 +23,13 @@ export interface TweetDTO {
 
 export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
   try {
+    const token = localStorage.getItem("token")
     const tweet = {
       content: objTweet.content,
       type: objTweet.type,
       originalTweetId: objTweet.tweetId,
     };
-    const resposta = await apiService.post("/tweets", tweet);
+    const resposta = await apiService.post("/tweets", tweet, {headers:{Authorization:token}});
 
     return {
       message: resposta.data?.message,
@@ -46,7 +47,8 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
 
 export async function list() {
   try {
-    const resposta = await apiService.get("/tweets");
+    const token = localStorage.getItem("token")
+    const resposta = await apiService.get("/tweets", {headers:{Authorization:token}});
     return {
       ok: resposta.data?.ok,
       message: resposta.data?.message,

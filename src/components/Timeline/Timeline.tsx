@@ -8,7 +8,7 @@ import CardTweet from "../CardTweets/CardTweet";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
-const BodyTimeline = styled.div`
+export const BodyTimeline = styled.div`
   border: 2px solid #e0e0e0;
   width: 60%;
 `;
@@ -18,7 +18,7 @@ const TimeLineStyled = styled.div`
   overflow-y: auto;
 `;
 
-const HrStyled = styled.hr`
+export const HrStyled = styled.hr`
   opacity: 0.5;
   padding: 0;
   margin: 0;

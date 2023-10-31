@@ -57,7 +57,8 @@ export async function listAllUsers(id: string): Promise<ResponseAPI> {
 
 export async function listMe(): Promise<ResponseAPI> {
   try {
-    const resposta = await apiService.get(`/users/me`);
+    const token = localStorage.getItem("token")
+    const resposta = await apiService.get(`/users/me`,{headers:{Authorization:token}});
 
     return {
       ok: resposta.data?.ok,

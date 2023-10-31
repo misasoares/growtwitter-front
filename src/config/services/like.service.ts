@@ -11,11 +11,12 @@ export interface LikeDto {
 
 export async function createLike(data: LikeDto) {
   try {
+    const token = localStorage.getItem("token")
     const like = {
       tweetId: data.tweetId,
       retweetId: data.retweetId,
     };
-    const resposta = await apiService.post("/likes", like);
+    const resposta = await apiService.post("/likes", like,{headers:{Authorization:token}});
 
     return {
       message: resposta.data?.message,
@@ -33,11 +34,12 @@ export async function createLike(data: LikeDto) {
 
 export async function deleteLike(data: LikeDto) {
   try {
+    const token = localStorage.getItem("token")
     const like = {
       id: data.id,
     };
 
-    const resposta = await apiService.delete(`/likes/${like.id}`);
+    const resposta = await apiService.delete(`/likes/${like.id}`, {headers:{Authorization:token}});
 
     return {
       message: resposta.data?.message,
@@ -53,8 +55,9 @@ export async function deleteLike(data: LikeDto) {
   }
 }
 
-export async function listLikes(token: string) {
+export async function listLikes() {
   try {
+    const token = localStorage.getItem("token")
     const resposta = await apiService.get("/likes/list", {
       headers: {
         Authorization: token,

@@ -58,7 +58,7 @@ export const IconeStyled = styled.div<{ imgurl: string }>`
 `;
 
 interface SidebarLineProp {
-  userLogado?: UserDto;
+  userLogado?: UserDto | null;
 }
 
 function Sidebar(props: SidebarLineProp) {
@@ -73,6 +73,7 @@ function Sidebar(props: SidebarLineProp) {
       navigate("/login");
       return;
     }
+
   }, [navigate, props.userLogado]);
 
   function deslogar() {
@@ -80,27 +81,27 @@ function Sidebar(props: SidebarLineProp) {
     navigate("/login");
   }
 
-  const userAvatarUrl = `https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`;
+ 
 
   return (
     <BodySidebar>
       <SidebarStyled>
         <div>
           <img src={logo} alt="icone growtweet" />
-          <p>
+          <p onClick={()=>navigate('/')}>
             <img src={iconePaginaInicialSelecionado} alt="icone pagina inicial selecionado" /> Página Inicial
           </p>
-          <p>
+          <p onClick={()=>navigate('/explorar')}>
             <img src={iconeExplorar} alt="icone explorar" /> Explorar
           </p>
-          <p>
+          <p onClick={()=>navigate('/perfil')}>
             <img src={iconePerfil} alt="icone perfil" /> Perfil
           </p>
         </div>
 
         <ButtonTweetar type="button" action={() => setOpenModal(true)} />
         <ButtonLogout onClick={deslogar}>sair</ButtonLogout>
-        <IconeStyled imgurl={props.userLogado === undefined ? "https://www.gravatar.com/avatar/?d=blank" : userAvatarUrl}></IconeStyled>
+        <IconeStyled imgurl={userLogado === undefined ? "https://www.gravatar.com/avatar/?d=blank" : `https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`}></IconeStyled>
       </SidebarStyled>
       <Modal isOpen={openModal} tweet={undefined} type="tweet" onClose={() => setOpenModal(false)} />
     </BodySidebar>
