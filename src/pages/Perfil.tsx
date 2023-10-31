@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import styled from "styled-components";
-
 import { Box, CircularProgress } from "@mui/material";
 import { TweetDTO, list } from "../config/services/tweet.service";
 import { BodyTimeline, HrStyled } from "../components/Timeline/Timeline";
