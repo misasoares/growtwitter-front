@@ -11,10 +11,10 @@ interface ModalPrimaryProps {
   onClose: () => void;
   type: "tweet" | "retweet";
   tweet?: TweetDTO;
-
+  addTweet: (tweets: TweetDTO) => void;
 }
 
-const Modal: React.FC<ModalPrimaryProps> = ({ isOpen, onClose, type, tweet }) => {
+const Modal: React.FC<ModalPrimaryProps> = ({ isOpen, onClose, type, tweet, addTweet }) => {
   const [loading, setLoading] = useState(false);
 
   async function criarTweet(e: React.FormEvent<HTMLFormElement>) {
@@ -30,9 +30,9 @@ const Modal: React.FC<ModalPrimaryProps> = ({ isOpen, onClose, type, tweet }) =>
     const resposta = await create(tweetCreate);
     if (resposta.code === 201) {
       setLoading(false);
+      addTweet(resposta.data);
+      console.log(resposta.data)
       onClose();
-     
-      
     }
   }
   if (isOpen) {

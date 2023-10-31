@@ -5,13 +5,14 @@ import { UserDto, listMe } from "../../config/services/user.service";
 import Modal from "../Modal/Modal";
 import CardTweet from "../CardTweets/CardTweet";
 import { Box, CircularProgress } from "@mui/material";
-import { BodyTimeline, ContainerDiv, HrStyled, PTimelineStyled, TimeLineStyled } from "./TimelineStyled";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { ContainerDiv, PTimelineStyled, TimeLineStyled } from "./TimelineStyled";
 
 export const BodyTimeline = styled.div`
   border: 2px solid #e0e0e0;
   width: 60%;
 `;
-
 
 export const HrStyled = styled.hr`
   opacity: 0.5;
@@ -19,16 +20,20 @@ export const HrStyled = styled.hr`
   margin: 0;
 `;
 
-export default function Timeline() {
+interface TimelineProps{
+  tweets : TweetDTO[]
+  setarTweets: (tweets:TweetDTO[])=> void
+  addTweet: (tweet:TweetDTO)=>void
+}
+
+export default function Timeline({tweets, setarTweets, addTweet}:TimelineProps) {
   const navigate = useNavigate();
   const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [openModal, setOpenModal] = useState(false);
   const [tweetModal, setTweetModal] = useState<TweetDTO | undefined>(undefined);
-  const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [loading, setLoading] = useState(false);
 
 
-  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -38,7 +43,6 @@ export default function Timeline() {
     setLoading(true);
 
     console.log(loading);
-
 
     async function me() {
       const res = await listMe();
@@ -50,7 +54,7 @@ export default function Timeline() {
       if (res.code !== 200) {
         alert("Algo deu errado, atualize a página.");
       }
-      setTweets(res.data);
+      setarTweets(res.data);
     }
 
     console.log(tweets);
@@ -58,8 +62,6 @@ export default function Timeline() {
     setLoading(false);
     me();
     listarTweets();
-
-
   }, []);
 
   async function like(tweetId: string, index: number) {
@@ -78,8 +80,7 @@ export default function Timeline() {
         userId: userLogado!.id,
       });
 
-      setTweets(copy);
-
+      setarTweets(copy);
 
       const criarLike = await createLike(dataCreate);
 
@@ -91,7 +92,7 @@ export default function Timeline() {
         retweetId: criarLike.data.retweetId,
         userId: criarLike.data.userId,
       };
-      setTweets(copy2);
+      setarTweets(copy2);
 
       console.log(criarLike);
     } else {
@@ -103,7 +104,7 @@ export default function Timeline() {
 
       const copy = [...tweets!];
       copy[index].Likes.splice(indexLike, 1);
-      setTweets(copy);
+      setarTweets(copy);
 
       const del = await deleteLike(dataToDelete);
 
@@ -116,11 +117,8 @@ export default function Timeline() {
     setOpenModal(true);
   }
 
-
-
   return (
     <BodyTimeline>
-       
       {loading ? (
         <>
           <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
@@ -130,6 +128,7 @@ export default function Timeline() {
       ) : (
         <TimeLineStyled>
           <h2>Página inicial</h2>
+          {/* fazer acordion para clicar nos tweets e mostrar os retweets de determinado tweet */}
           <HrStyled />
           {tweets &&
             tweets.map((t, index) => (
@@ -152,20 +151,20 @@ export default function Timeline() {
 
                   <PTimelineStyled>{t.Likes.length}</PTimelineStyled>
 
-                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => showModal(t)}>
-                    <g clipPath="url(#clip0_83_2269)">
+                  <svg onClick={() => showModal(t)} width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clipPath="url(#clip0_83_2312)">
                       <path
-                        d="M5.48279 10.9956C4.24557 10.9956 3.00749 11.0034 1.77027 10.9931C0.636876 10.9836 0.0597954 10.4413 0.00961455 9.33704C-0.0128803 8.85235 0.0234576 8.36423 0.00096267 7.87954C-0.0198018 7.43181 0.229372 7.36821 0.595347 7.37251C0.941422 7.37681 1.23126 7.38368 1.20011 7.85634C1.17589 8.22587 1.19146 8.5997 1.19838 8.97095C1.21396 9.75813 1.2477 9.80024 2.02723 9.80454C3.49459 9.81227 4.96282 9.80712 6.43017 9.80712C7.32218 9.80712 8.21419 9.81743 9.1062 9.80282C9.73692 9.79251 9.77499 9.74352 9.79576 9.09985C9.8096 8.67188 9.81739 8.2422 9.80181 7.81423C9.78624 7.3897 10.0501 7.37079 10.3642 7.37852C10.6895 7.38626 11.0165 7.35274 10.9992 7.84087C10.9802 8.38313 11.0148 8.92798 10.9854 9.46938C10.9343 10.4242 10.3529 10.9759 9.36749 10.9905C8.07317 11.0094 6.77798 10.9948 5.48279 10.9956Z"
+                        d="M11.7401 6.06477C11.0908 6.66098 10.4776 7.21187 9.87926 7.77834C9.6548 7.99148 9.48911 7.95466 9.28164 7.7571C8.75198 7.25365 8.21596 6.75586 7.66436 6.27648C7.39387 6.0414 7.52132 5.88208 7.70684 5.70364C7.88174 5.53512 8.01486 5.23772 8.32146 5.54928C8.51407 5.74471 8.73145 5.91536 8.92688 6.08884C9.15205 5.93873 9.09824 5.76029 9.09895 5.60805C9.10461 4.47581 9.11099 3.34358 9.09895 2.21205C9.08974 1.32764 8.74136 0.996967 7.83642 0.989178C7.19985 0.983513 6.56257 0.993426 5.926 0.986345C5.37085 0.979972 5.36661 0.970059 5.36236 0.518298C5.35811 0.0452938 5.37652 0.0176783 5.88776 0.0113055C6.61851 0.00280838 7.35067 -0.00639679 8.08071 0.0134297C9.22782 0.0438776 10.0322 0.827733 10.0641 1.98192C10.0952 3.11345 10.0683 4.24568 10.0782 5.37792C10.0804 5.60309 10.0018 5.84809 10.166 6.0499C10.3445 6.07822 10.4245 5.94227 10.5257 5.85588C10.9553 5.48956 11.3601 5.5599 11.7401 6.06689V6.06477Z"
                         fill="#828282"
                       />
                       <path
-                        d="M2.07397 3.25197C3.13729 2.20267 4.16427 1.20236 5.17308 0.184861C5.44907 -0.0935768 5.63682 -0.0351393 5.8834 0.214079C6.79098 1.13361 7.6951 2.0583 8.63816 2.94088C9.05431 3.33017 8.74457 3.50205 8.52395 3.76416C8.25747 4.08041 8.04896 4.08127 7.76345 3.77447C7.30231 3.27775 6.80396 2.81541 6.31426 2.33158C6.0573 2.58252 6.14036 2.82314 6.13863 3.03455C6.12911 4.43705 6.13863 5.83955 6.13084 7.24119C6.12738 7.91236 6.03913 7.96736 5.38851 7.94416C5.05455 7.93213 4.93169 7.79892 4.93429 7.47924C4.94121 6.50642 4.93429 5.53361 4.93429 4.55994C4.93429 3.84838 4.93429 3.13681 4.93429 2.44674C4.61936 2.29892 4.52592 2.53611 4.39354 2.65814C4.11841 2.9108 3.85972 3.18064 3.59498 3.44361C3.10182 3.93288 2.59482 3.86872 2.07397 3.25111V3.25197Z"
+                        d="M1.4955 1.90687C1.19032 2.05557 1.00763 2.27649 0.807241 2.46909C0.530378 2.73533 0.396549 2.50804 0.244309 2.33597C0.0963184 2.17028 -0.154345 2.02158 0.131015 1.76171C0.705984 1.23914 1.28237 0.71657 1.84813 0.184087C2.0202 0.021934 2.15332 0.0162693 2.3268 0.177714C2.89469 0.708781 3.46541 1.23702 4.04534 1.75463C4.33636 2.01379 4.10198 2.16461 3.94691 2.32464C3.79963 2.47617 3.68421 2.7587 3.39248 2.48538C3.17368 2.28074 2.98179 2.03503 2.70563 1.91678C2.5895 1.98334 2.57817 2.0761 2.57817 2.17099C2.57676 3.39669 2.56047 4.62169 2.5803 5.84739C2.59375 6.66594 2.93576 6.98741 3.76564 7.00653C4.44895 7.02211 5.13225 7.00299 5.81556 7.01503C6.26945 7.02282 6.5102 7.42855 6.30839 7.82296C6.2482 7.94121 6.1342 7.97591 6.01241 7.97591C5.07065 7.97591 4.12464 8.05451 3.18784 7.93342C2.43018 7.83571 1.8106 7.20551 1.66686 6.45068C1.61446 6.17524 1.60667 5.88846 1.60455 5.60735C1.59747 4.61744 1.60667 3.62753 1.59818 2.63833C1.59605 2.41103 1.65978 2.17028 1.49338 1.90829L1.4955 1.90687Z"
                         fill="#828282"
                       />
                     </g>
                     <defs>
-                      <clipPath id="clip0_83_2269">
-                        <rect width="11" height="11" fill="white" />
+                      <clipPath id="clip0_83_2312">
+                        <rect width="11.7401" height="8" fill="white" />
                       </clipPath>
                     </defs>
                   </svg>
@@ -178,7 +177,7 @@ export default function Timeline() {
         </TimeLineStyled>
       )}
 
-      <Modal isOpen={openModal} tweet={tweetModal} type="retweet"  onClose={()=>setOpenModal(false)} />
+      <Modal addTweet={addTweet} isOpen={openModal} tweet={tweetModal} type="retweet" onClose={() => setOpenModal(false)} />
     </BodyTimeline>
   );
 }

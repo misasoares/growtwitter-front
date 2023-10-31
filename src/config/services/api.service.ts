@@ -2,9 +2,9 @@
 import axios from "axios";
 
 const apiService = axios.create({
-  baseURL: "https://api-growtwitter-misael.onrender.com",
+  baseURL: "http://localhost:3333/",
 });
-console.log(apiService)
+
 export default apiService;
 
 export interface ResponseAPI {
@@ -13,3 +13,9 @@ export interface ResponseAPI {
   message?: string;
   data?: any;
 }
+
+apiService.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  config.headers.Authorization = token ? token : "";
+  return config;
+});

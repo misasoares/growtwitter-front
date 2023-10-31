@@ -7,7 +7,7 @@ export interface UserDto {
   name: string;
   username: string;
   LikesToUser: LikeDto[];
-  iconePerfil:string
+  iconePerfil: string;
 }
 
 interface CreateUser {
@@ -57,10 +57,9 @@ export async function listAllUsers(id: string): Promise<ResponseAPI> {
 
 export async function listMe(): Promise<ResponseAPI> {
   try {
-    const token = localStorage.getItem("token")
-    const resposta = await apiService.get(`/users/me`,{headers:{Authorization:token}});
+    const token = localStorage.getItem("token");
+    const resposta = await apiService.get(`/users/me`, { headers: { Authorization: token } });
 
-    console.log(resposta)
     return {
       ok: resposta.data?.ok,
       message: resposta.data?.message,
