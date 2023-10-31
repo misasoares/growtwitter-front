@@ -3,7 +3,8 @@ import React from "react";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Cadastro from "../pages/Cadastro";
-import Perfil from "../components/Perfil/Perfil";
+import Perfil from "../pages/Perfil";
+
 
 
 const router = createBrowserRouter([
@@ -20,7 +21,11 @@ const router = createBrowserRouter([
     path:'/cadastro',
     element:<Cadastro/>,
     errorElement:<h1>NOT FOUND</h1>
-  },
+  },{
+    path:'perfil',
+    element:<Perfil/>,
+    errorElement:<h1>NOT FOUND</h1>
+  }
 
 
 ]);

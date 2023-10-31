@@ -3,7 +3,11 @@ import ButtonTweetar from "../Button/Button";
 import Modal from "../../components/Modal/Modal";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserDto } from "../../config/services/user.service";
+import { UserDto, listMe } from "../../config/services/user.service";
+import logo from "../../images/logo_growtweet.svg";
+import iconePaginaInicialSelecionado from "../../images/icone_pagina inicial_selecionado.svg";
+import iconeExplorar from "../../images/icone_explorar.svg";
+import iconePerfil from "../../images/icone_perfil.svg";
 
 const BodySidebar = styled.div`
   display: flex;
@@ -30,8 +34,7 @@ const ButtonLogout = styled.button`
   width: 60px;
   color: white;
   position: absolute;
-  bottom: 10px; 
-
+  bottom: 10px;
 `;
 
 export const IconeStyled = styled.div<{ imgurl: string }>`
@@ -48,48 +51,39 @@ export const IconeStyled = styled.div<{ imgurl: string }>`
   background-position: center;
   margin-right: 10px;
   position: absolute;
-  bottom: 50px; 
-  
-  
+  bottom: 50px;
 `;
 
-interface SidebarProp {
-  userLogado?: UserDto;
-  logo:string
-  iconePaginaInicialSelecionado:string
-  iconeExplorar:string
-  iconePerfil:string
-  showPerfil: (show:boolean)=> void
-}
-
-function Sidebar(props: SidebarProp) {
+function Sidebar() {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [userLogado, setUserLogado] = useState<UserDto | null>();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setUserLogado(props.userLogado);
+
     if (!token) {
       navigate("/login");
       return;
     }
-  }, [navigate, props.userLogado]);
+    async function me() {
+      const res = await listMe();
+      setUserLogado(res.data);
+    }
+    me();
+  }, [navigate]);
+
+  useEffect(() => {
+    return () => {
+      console.log("desmontar componente");
+      setUserLogado(null);
+    };
+  }, []);
 
   function deslogar() {
     localStorage.removeItem("token");
     navigate("/login");
   }
-
-  function handleIconClkick(icon:string){
-    if(icon === props.iconePerfil){
-      props.showPerfil(true)
-    }else{
-      props.showPerfil(false)
-      
-    }
-  }
-
 
   const userAvatarUrl = `https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`;
 
@@ -97,21 +91,21 @@ function Sidebar(props: SidebarProp) {
     <BodySidebar>
       <SidebarStyled>
         <div>
-          <img src={props.logo} alt="icone growtweet" />
-          <p onClick={()=>handleIconClkick(props.iconePaginaInicialSelecionado)}>
-            <img  src={props.iconePaginaInicialSelecionado} alt="icone pagina inicial selecionado" /> Página Inicial
+          <img src={logo} alt="icone growtweet" />
+          <p onClick={() => navigate("/")}>
+            <img src={iconePaginaInicialSelecionado} alt="icone pagina inicial selecionado" /> Página Inicial
           </p>
-          <p>
-            <img src={props.iconeExplorar} alt="icone explorar" /> Explorar
+          <p onClick={() => navigate("/explorar")}>
+            <img src={iconeExplorar} alt="icone explorar" /> Explorar
           </p>
-          <p onClick={()=>handleIconClkick(props.iconePerfil)}>
-            <img src={props.iconePerfil}  alt="icone perfil" /> Perfil
+          <p onClick={() => navigate("/perfil")}>
+            <img src={iconePerfil} alt="icone perfil" /> Perfil
           </p>
         </div>
 
         <ButtonTweetar type="button" action={() => setOpenModal(true)} />
         <ButtonLogout onClick={deslogar}>sair</ButtonLogout>
-        <IconeStyled imgurl={props.userLogado === undefined ? "https://www.gravatar.com/avatar/?d=blank" : userAvatarUrl}></IconeStyled>
+        <IconeStyled imgurl={userLogado === undefined ? "https://www.gravatar.com/avatar/?d=blank" : userAvatarUrl}></IconeStyled>
       </SidebarStyled>
       <Modal isOpen={openModal} tweet={undefined} type="tweet" onClose={() => setOpenModal(false)} />
     </BodySidebar>

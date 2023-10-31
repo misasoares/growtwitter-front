@@ -3,11 +3,11 @@ import axios from "axios";
 
 const apiService = axios.create({
   baseURL: "https://api-growtwitter-misael.onrender.com",
-  headers: {
-    Authorization: localStorage.getItem("token"),
-  },
+  // headers: {
+  //   Authorization: localStorage.getItem("token"),
+  // },
 });
-
+console.log(apiService)
 export default apiService;
 
 export interface ResponseAPI {

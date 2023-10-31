@@ -28,7 +28,8 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
       type: objTweet.type,
       originalTweetId: objTweet.tweetId,
     };
-    const resposta = await apiService.post("/tweets", tweet);
+    const token = localStorage.getItem("token")
+    const resposta = await apiService.post("/tweets", tweet, {headers:{Authorization: token}});
 
     return {
       message: resposta.data?.message,
@@ -46,7 +47,9 @@ export async function create(objTweet: TweetRequest): Promise<ResponseAPI> {
 
 export async function list() {
   try {
-    const resposta = await apiService.get("/tweets");
+    const token = localStorage.getItem("token")
+    console.log(token, "aqui é o token que ta indo dos tweets")
+    const resposta = await apiService.get("/tweets", {headers:{Authorization: token}});
     return {
       ok: resposta.data?.ok,
       message: resposta.data?.message,

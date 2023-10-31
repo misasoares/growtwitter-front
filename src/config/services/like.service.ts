@@ -15,7 +15,8 @@ export async function createLike(data: LikeDto) {
       tweetId: data.tweetId,
       retweetId: data.retweetId,
     };
-    const resposta = await apiService.post("/likes", like);
+    const token = localStorage.getItem("token")
+    const resposta = await apiService.post("/likes", like, {headers:{Authorization: token}});
 
     return {
       message: resposta.data?.message,
@@ -36,8 +37,8 @@ export async function deleteLike(data: LikeDto) {
     const like = {
       id: data.id,
     };
-
-    const resposta = await apiService.delete(`/likes/${like.id}`);
+    const token = localStorage.getItem("token")
+    const resposta = await apiService.delete(`/likes/${like.id}`, {headers:{Authorization: token}});
 
     return {
       message: resposta.data?.message,
