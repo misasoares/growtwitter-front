@@ -1,13 +1,13 @@
-import logo from "../../images/logo_growtweet.svg";
-import iconePaginaInicialSelecionado from "../../images/icone_pagina inicial_selecionado.svg";
-import styled from "styled-components";
-import iconeExplorar from "../../images/icone_explorar.svg";
-import iconePerfil from "../../images/icone_perfil.svg";
 import ButtonTweetar from "../Button/Button";
 import Modal from "../../components/Modal/Modal";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserDto } from "../../config/services/user.service";
+import { UserDto, listMe } from "../../config/services/user.service";
+import logo from "../../images/logo_growtweet.svg";
+import iconePaginaInicialSelecionado from "../../images/icone_pagina inicial_selecionado.svg";
+import iconeExplorar from "../../images/icone_explorar.svg";
+import iconePerfil from "../../images/icone_perfil.svg";
+import { BodySidebar, ButtonLogout, IconeStyled, SidebarStyled } from "./SidebarStyled";
 
 const BodySidebar = styled.div`
   display: flex;
@@ -68,7 +68,7 @@ function Sidebar(props: SidebarLineProp) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setUserLogado(props.userLogado);
+
     if (!token) {
       navigate("/login");
       return;
@@ -103,7 +103,7 @@ function Sidebar(props: SidebarLineProp) {
         <ButtonLogout onClick={deslogar}>sair</ButtonLogout>
         <IconeStyled imgurl={userLogado === undefined ? "https://www.gravatar.com/avatar/?d=blank" : `https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`}></IconeStyled>
       </SidebarStyled>
-      <Modal isOpen={openModal} tweet={undefined} type="tweet" onClose={() => setOpenModal(false)} />
+      <Modal copyTweet={() => passaTweet()} isOpen={openModal} tweet={undefined} type="tweet" onClose={() => setOpenModal(false)} />
     </BodySidebar>
   );
 }

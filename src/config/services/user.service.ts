@@ -60,6 +60,7 @@ export async function listMe(): Promise<ResponseAPI> {
     const token = localStorage.getItem("token")
     const resposta = await apiService.get(`/users/me`,{headers:{Authorization:token}});
 
+    console.log(resposta)
     return {
       ok: resposta.data?.ok,
       message: resposta.data?.message,

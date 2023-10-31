@@ -1,22 +1,17 @@
-import styled from "styled-components";
 import { TweetDTO, list } from "../../config/services/tweet.service";
 import { useEffect, useState } from "react";
 import { createLike, deleteLike } from "../../config/services/like.service";
-import { UserDto } from "../../config/services/user.service";
+import { UserDto, listMe } from "../../config/services/user.service";
 import Modal from "../Modal/Modal";
 import CardTweet from "../CardTweets/CardTweet";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import { Box, CircularProgress } from "@mui/material";
+import { BodyTimeline, ContainerDiv, HrStyled, PTimelineStyled, TimeLineStyled } from "./TimelineStyled";
 
 export const BodyTimeline = styled.div`
   border: 2px solid #e0e0e0;
   width: 60%;
 `;
 
-const TimeLineStyled = styled.div`
-  height: 100%;
-  overflow-y: auto;
-`;
 
 export const HrStyled = styled.hr`
   opacity: 0.5;
@@ -24,35 +19,48 @@ export const HrStyled = styled.hr`
   margin: 0;
 `;
 
-interface TimeLineProp {
-  userLogado?: UserDto | null;
-}
-
-export default function Timeline(props: TimeLineProp) {
-  const [tweets, setTweets] = useState<TweetDTO[]>([]);
+export default function Timeline() {
+  const navigate = useNavigate();
   const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [openModal, setOpenModal] = useState(false);
   const [tweetModal, setTweetModal] = useState<TweetDTO | undefined>(undefined);
-  const [copyTweets, setCopyTweets] = useState<object>({});
+  const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [loading, setLoading] = useState(false);
 
+
+  
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     setLoading(true);
 
-    setUserLogado(props.userLogado);
+    console.log(loading);
+
+
+    async function me() {
+      const res = await listMe();
+      setUserLogado(res.data);
+    }
 
     async function listarTweets() {
       const res = await list();
-
       if (res.code !== 200) {
         alert("Algo deu errado, atualize a página.");
       }
       setTweets(res.data);
-      setLoading(false);
     }
 
+    console.log(tweets);
+
+    setLoading(false);
+    me();
     listarTweets();
-  }, [copyTweets, props.userLogado]);
+
+
+  }, []);
 
   async function like(tweetId: string, index: number) {
     const userLiked = tweets[index].Likes.some((like) => like.userId === userLogado!.id);
@@ -72,10 +80,11 @@ export default function Timeline(props: TimeLineProp) {
 
       setTweets(copy);
 
+
       const criarLike = await createLike(dataCreate);
 
-      const indexLike = tweets[index].Likes.findIndex((l) => l.userId === userLogado);
-      const copy2 = [...tweets];
+      const indexLike = tweets![index].Likes.findIndex((l) => l.userId === userLogado);
+      const copy2 = [...tweets!];
       copy[index].Likes[indexLike] = {
         id: criarLike.data.id,
         tweetId: criarLike.data.tweetId,
@@ -86,13 +95,13 @@ export default function Timeline(props: TimeLineProp) {
 
       console.log(criarLike);
     } else {
-      const indexLike = tweets[index].Likes.findIndex((l) => l.userId === userLogado!.id);
+      const indexLike = tweets![index].Likes.findIndex((l) => l.userId === userLogado!.id);
 
       const dataToDelete = {
-        id: tweets[index].Likes[indexLike].id,
+        id: tweets![index].Likes[indexLike].id,
       };
 
-      const copy = [...tweets];
+      const copy = [...tweets!];
       copy[index].Likes.splice(indexLike, 1);
       setTweets(copy);
 
@@ -107,16 +116,11 @@ export default function Timeline(props: TimeLineProp) {
     setOpenModal(true);
   }
 
-  function hideModal() {
-    setOpenModal(false);
 
-    setCopyTweets({
-      fakeTweet: "para atualizar o componente",
-    });
-  }
 
   return (
     <BodyTimeline>
+       
       {loading ? (
         <>
           <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
@@ -125,16 +129,18 @@ export default function Timeline(props: TimeLineProp) {
         </>
       ) : (
         <TimeLineStyled>
+          <h2>Página inicial</h2>
+          <HrStyled />
           {tweets &&
             tweets.map((t, index) => (
               <div key={index} style={{ padding: "10px 0px 0px 10px" }}>
-                <CardTweet iconePerfilUser={t.User.iconePerfil} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : null} index={index} tweet={t} key={index} />
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <CardTweet iconePerfilUser={t.User.iconePerfil ? t.User.iconePerfil : ""} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : ""} index={index} tweet={t} key={index} />
+                <ContainerDiv>
                   <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => like(t.id, index)}>
                     <g clipPath="url(#clip0_83_2222)">
                       <path
                         d="M0 3.08429C0.0179879 1.989 0.502097 0.988356 1.59076 0.388938C2.70444 -0.22504 3.80484 -0.0826685 4.84735 0.616248C5.50587 1.05792 5.49726 1.05631 6.13388 0.62919C7.20064 -0.0867132 8.32293 -0.238792 9.45773 0.417251C10.598 1.07572 11.054 2.14836 10.9945 3.46611C10.9445 4.58567 10.4713 5.54102 9.8347 6.41628C8.94469 7.641 7.81145 8.58826 6.56715 9.39395C5.31895 10.2021 5.67636 10.1956 4.45553 9.40771C3.16509 8.5737 1.99666 7.5868 1.08944 6.30546C0.445788 5.39541 0.00625667 4.40366 0 3.08429ZM5.48866 2.9128C5.26968 2.62725 5.1117 2.4145 4.94746 2.20741C4.68077 1.8709 4.37263 1.58616 3.99175 1.38878C2.5754 0.651841 1.11134 1.57402 1.08397 3.21534C1.07067 4.00486 1.34909 4.69326 1.75265 5.33312C2.62702 6.71963 3.86427 7.70005 5.1899 8.57774C5.38308 8.70555 5.56139 8.74196 5.76786 8.60525C7.20299 7.65071 8.5513 6.59991 9.42176 5.03058C9.77917 4.38667 9.98486 3.69908 9.90587 2.94435C9.8128 2.05129 9.25987 1.39363 8.41522 1.18816C7.59716 0.989165 6.92926 1.31355 6.35755 1.87899C6.06115 2.17182 5.81557 2.51966 5.48788 2.9128H5.48866Z"
-                        fill={t.Likes.some((l) => l.userId === userLogado!.id) ? "red" : "#828282"}
+                        fill={t.Likes.some((l) => l.userId === userLogado?.id) ? "red" : "#828282"}
                       />
                     </g>
                     <defs>
@@ -144,7 +150,7 @@ export default function Timeline(props: TimeLineProp) {
                     </defs>
                   </svg>
 
-                  <p style={{ marginLeft: "5px", marginRight: "8px" }}>{t.Likes.length}</p>
+                  <PTimelineStyled>{t.Likes.length}</PTimelineStyled>
 
                   <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => showModal(t)}>
                     <g clipPath="url(#clip0_83_2269)">
@@ -164,15 +170,15 @@ export default function Timeline(props: TimeLineProp) {
                     </defs>
                   </svg>
 
-                  <p style={{ marginLeft: "5px", marginRight: "8px" }}>{t.retweets ? t.retweets.length : 0}</p>
-                </div>
+                  <PTimelineStyled>{t.retweets ? t.retweets.length : 0}</PTimelineStyled>
+                </ContainerDiv>
                 <HrStyled />
               </div>
             ))}
         </TimeLineStyled>
       )}
 
-      <Modal isOpen={openModal} tweet={tweetModal} type="retweet" onClose={() => hideModal()} />
+      <Modal isOpen={openModal} tweet={tweetModal} type="retweet"  onClose={()=>setOpenModal(false)} />
     </BodyTimeline>
   );
 }
