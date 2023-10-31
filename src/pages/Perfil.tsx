@@ -5,10 +5,10 @@ import styled from "styled-components";
 
 import { Box, CircularProgress } from "@mui/material";
 import { TweetDTO, list } from "../config/services/tweet.service";
-import { BodyTimeline, HrStyled } from "../components/Timeline/Timeline";
 import CardTweet from "../components/CardTweets/CardTweet";
 import { UserDto, listMe } from "../config/services/user.service";
 import Sidebar from "../components/Sidebar/Sidebar";
+import { BodyTimeline, HrStyled } from "../components/Timeline/TimelineStyled";
 
 export const IconeStyled = styled.div<{ imgurl: string }>`
   width: 70px;
@@ -56,11 +56,10 @@ function PerfilComponent() {
     me();
     listarTweets();
 
-    return ()=>{
-        console.log("desmontar componente")
-        setUserLogado(null)
-      }
-
+    return () => {
+      console.log("desmontar componente");
+      setUserLogado(null);
+    };
   }, []);
   const userAvatarUrl = `https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`;
 
@@ -68,37 +67,38 @@ function PerfilComponent() {
 
   return (
     <>
-    <Sidebar/>
-    <BodyTimeline>
-      {loading ? (
-        <>
-          <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
-            <CircularProgress />
-          </Box>
-        </>
-      ) : (
-        <div style={{ paddingLeft: "15px" }}>
-          <h2 style={{ marginBottom: "0" }}>Perfil de {userLogado?.username}</h2>
-          <p style={{ margin: "0 0 10px 0", padding: "0" }}>{tweetsDoUsuario.length} tweets.</p>
-          <IconeStyled imgurl={userLogado === undefined ? "https://www.gravatar.com/avatar/?d=blank" : userAvatarUrl}></IconeStyled>
-          <h3 style={{ marginBottom: "0" }}>{userLogado?.name}</h3>
-          <p style={{ marginTop: "0" }}>
-            <strong>{userLogado?.username}</strong>
-          </p>
+      <Sidebar />
+      <BodyTimeline>
+        {loading ? (
+          <>
+            <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
+              <CircularProgress />
+            </Box>
+          </>
+        ) : (
+          <div style={{ paddingLeft: "15px" }}>
+            <h2 style={{ marginBottom: "0" }}>Perfil de {userLogado?.username}</h2>
+            <p style={{ margin: "0 0 10px 0", padding: "0" }}>{tweetsDoUsuario.length} tweets.</p>
+            <IconeStyled imgurl={userLogado === undefined ? "https://www.gravatar.com/avatar/?d=blank" : userAvatarUrl}></IconeStyled>
+            <h3 style={{ marginBottom: "0" }}>{userLogado?.name}</h3>
+            <p style={{ marginTop: "0" }}>
+              <strong>{userLogado?.username}</strong>
+            </p>
 
-          <div style={{ border: "1px solid #bbbbbb", borderRadius: "10px", padding: "10px" }}>
-            {tweetsDoUsuario.map((t, index) => (
-              <div key={index}>
-                <div style={{ margin: "10px" }}>
-                  <CardTweet iconePerfilUser={t.User.iconePerfil} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : null} index={index} tweet={t} key={index} />
+            <div style={{ border: "1px solid #bbbbbb", borderRadius: "10px", padding: "10px" }}>
+              {tweetsDoUsuario.map((t, index) => (
+                <div key={index}>
+                  <div style={{ margin: "10px" }}>
+                    <CardTweet iconePerfilUser={t.User.iconePerfil} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : null} index={index} tweet={t} key={index} />
+                  </div>
+                  <HrStyled />
                 </div>
-                <HrStyled />
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </BodyTimeline></>
+        )}
+      </BodyTimeline>
+    </>
   );
 }
 export default PerfilComponent;

@@ -1,29 +1,17 @@
-import styled from "styled-components";
-import { TweetDTO, list } from "../../config/services/tweet.service";
+import { TweetDTO } from "../../config/services/tweet.service";
 import { useEffect, useState } from "react";
 import { createLike, deleteLike } from "../../config/services/like.service";
 import { UserDto, listMe } from "../../config/services/user.service";
 import Modal from "../Modal/Modal";
 import CardTweet from "../CardTweets/CardTweet";
 import { Box, CircularProgress } from "@mui/material";
+import { BodyTimeline, ContainerDiv, HrStyled, PTimelineStyled, TimeLineStyled } from "./TimelineStyled";
 
-export const BodyTimeline = styled.div`
-  border: 2px solid #e0e0e0;
-  width: 60%;
-`;
+interface TimeLineProps {
+  tweets: TweetDTO[];
+}
 
-const TimeLineStyled = styled.div`
-  height: 100%;
-  overflow-y: auto;
-`;
-
-export const HrStyled = styled.hr`
-  opacity: 0.5;
-  padding: 0;
-  margin: 0;
-`;
-
-export default function Timeline() {
+export default function Timeline(props: TimeLineProps) {
   const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [openModal, setOpenModal] = useState(false);
   const [tweetModal, setTweetModal] = useState<TweetDTO | undefined>(undefined);
@@ -37,22 +25,11 @@ export default function Timeline() {
       const res = await listMe();
       setUserLogado(res.data);
     }
-
-    async function listarTweets() {
-      const res = await list();
-      setLoading(false);
-      if (res.code !== 200) {
-        alert("Algo deu errado, atualize a página.");
-      }
-      setTweets(res.data);
-      setLoading(false);
-    }
-
+    setLoading(false);
     me();
-    listarTweets();
 
     setUserLogado(userLogado);
-    setTweets(tweets);
+    setTweets(props.tweets);
   }, [copyTweets]);
 
   async function like(tweetId: string, index: number) {
@@ -133,7 +110,7 @@ export default function Timeline() {
             tweets.map((t, index) => (
               <div key={index} style={{ padding: "10px 0px 0px 10px" }}>
                 <CardTweet iconePerfilUser={t.User.iconePerfil} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : null} index={index} tweet={t} key={index} />
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <ContainerDiv>
                   <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => like(t.id, index)}>
                     <g clipPath="url(#clip0_83_2222)">
                       <path
@@ -148,7 +125,7 @@ export default function Timeline() {
                     </defs>
                   </svg>
 
-                  <p style={{ marginLeft: "5px", marginRight: "8px" }}>{t.Likes.length}</p>
+                  <PTimelineStyled>{t.Likes.length}</PTimelineStyled>
 
                   <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => showModal(t)}>
                     <g clipPath="url(#clip0_83_2269)">
@@ -168,8 +145,8 @@ export default function Timeline() {
                     </defs>
                   </svg>
 
-                  <p style={{ marginLeft: "5px", marginRight: "8px" }}>{t.retweets ? t.retweets.length : 0}</p>
-                </div>
+                  <PTimelineStyled>{t.retweets ? t.retweets.length : 0}</PTimelineStyled>
+                </ContainerDiv>
                 <HrStyled />
               </div>
             ))}
