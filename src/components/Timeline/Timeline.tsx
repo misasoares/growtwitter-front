@@ -1,4 +1,4 @@
-import { TweetDTO } from "../../config/services/tweet.service";
+import { TweetDTO, list } from "../../config/services/tweet.service";
 import { useEffect, useState } from "react";
 import { createLike, deleteLike } from "../../config/services/like.service";
 import { UserDto, listMe } from "../../config/services/user.service";
@@ -7,30 +7,52 @@ import CardTweet from "../CardTweets/CardTweet";
 import { Box, CircularProgress } from "@mui/material";
 import { BodyTimeline, ContainerDiv, HrStyled, PTimelineStyled, TimeLineStyled } from "./TimelineStyled";
 
-interface TimeLineProps {
-  tweets: TweetDTO[];
-}
+import { useNavigate } from 'react-router-dom'
 
-export default function Timeline(props: TimeLineProps) {
+
+
+export default function Timeline() {
+  const navigate = useNavigate();
   const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [openModal, setOpenModal] = useState(false);
   const [tweetModal, setTweetModal] = useState<TweetDTO | undefined>(undefined);
-  const [copyTweets, setCopyTweets] = useState<object>({});
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [loading, setLoading] = useState(false);
 
+
+  
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     setLoading(true);
+
+    console.log(loading);
+
+
     async function me() {
       const res = await listMe();
       setUserLogado(res.data);
     }
+
+    async function listarTweets() {
+      const res = await list();
+      if (res.code !== 200) {
+        alert("Algo deu errado, atualize a página.");
+      }
+      setTweets(res.data);
+    }
+
+    console.log(tweets);
+
     setLoading(false);
     me();
+    listarTweets();
 
-    setUserLogado(userLogado);
-    setTweets(props.tweets);
-  }, [copyTweets]);
+
+  }, []);
 
   async function like(tweetId: string, index: number) {
     const userLiked = tweets[index].Likes.some((like) => like.userId === userLogado!.id);
@@ -49,7 +71,7 @@ export default function Timeline(props: TimeLineProps) {
       });
 
       setTweets(copy);
-      console.log(copyTweets);
+
 
       const criarLike = await createLike(dataCreate);
 
@@ -86,16 +108,11 @@ export default function Timeline(props: TimeLineProps) {
     setOpenModal(true);
   }
 
-  function hideModal() {
-    setOpenModal(false);
 
-    setCopyTweets({
-      fakeTweet: "para atualizar o componente",
-    });
-  }
 
   return (
     <BodyTimeline>
+       
       {loading ? (
         <>
           <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
@@ -109,7 +126,7 @@ export default function Timeline(props: TimeLineProps) {
           {tweets &&
             tweets.map((t, index) => (
               <div key={index} style={{ padding: "10px 0px 0px 10px" }}>
-                <CardTweet iconePerfilUser={t.User.iconePerfil} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : null} index={index} tweet={t} key={index} />
+                <CardTweet iconePerfilUser={t.User.iconePerfil ? t.User.iconePerfil : ""} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : ""} index={index} tweet={t} key={index} />
                 <ContainerDiv>
                   <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => like(t.id, index)}>
                     <g clipPath="url(#clip0_83_2222)">
@@ -153,7 +170,7 @@ export default function Timeline(props: TimeLineProps) {
         </TimeLineStyled>
       )}
 
-      <Modal isOpen={openModal} tweet={tweetModal} type="retweet" onClose={() => hideModal()} />
+      <Modal isOpen={openModal} tweet={tweetModal} type="retweet"  onClose={()=>setOpenModal(false)} />
     </BodyTimeline>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ButtonTweetar from "../../components/Button/Button";
 import X from "../../images/X.svg";
 import { TweetDTO, create } from "../../config/services/tweet.service";
@@ -11,14 +11,11 @@ interface ModalPrimaryProps {
   onClose: () => void;
   type: "tweet" | "retweet";
   tweet?: TweetDTO;
+
 }
 
 const Modal: React.FC<ModalPrimaryProps> = ({ isOpen, onClose, type, tweet }) => {
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    console.log(tweet);
-  }, [tweet]);
 
   async function criarTweet(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,6 +31,8 @@ const Modal: React.FC<ModalPrimaryProps> = ({ isOpen, onClose, type, tweet }) =>
     if (resposta.code === 201) {
       setLoading(false);
       onClose();
+     
+      
     }
   }
   if (isOpen) {

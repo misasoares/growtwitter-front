@@ -13,8 +13,8 @@ interface CardTweetProp {
 
 
 export default function CardTweet(props: CardTweetProp) {
-  const userAvatarUrl = `https://www.gravatar.com/avatar/${props.iconePerfilUser}?d=robohash`;
-  const avatarRetweetUrl = `https://www.gravatar.com/avatar/${props.iconePerfil}?d=robohash`;
+  const userAvatarUrl = props.iconePerfilUser? `https://www.gravatar.com/avatar/${props.iconePerfilUser}?d=robohash` : `https://www.gravatar.com/avatar/blank`;
+  const avatarRetweetUrl = props.iconePerfil ? `https://www.gravatar.com/avatar/${props.iconePerfil}?d=robohash` : `https://www.gravatar.com/avatar/blank`;
 
   return (
     <CardContainer key={props.index}>

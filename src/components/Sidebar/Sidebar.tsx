@@ -40,6 +40,10 @@ function Sidebar() {
     navigate("/login");
   }
 
+  function passaTweet() {
+    console.log("sidebar");
+  }
+
   const userAvatarUrl = `https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`;
 
   return (
@@ -62,7 +66,7 @@ function Sidebar() {
         <ButtonLogout onClick={deslogar}>Sair</ButtonLogout>
         <IconeStyled imgurl={userLogado === undefined ? "https://www.gravatar.com/avatar/?d=blank" : userAvatarUrl}></IconeStyled>
       </SidebarStyled>
-      <Modal isOpen={openModal} tweet={undefined} type="tweet" onClose={() => setOpenModal(false)} />
+      <Modal copyTweet={() => passaTweet()} isOpen={openModal} tweet={undefined} type="tweet" onClose={() => setOpenModal(false)} />
     </BodySidebar>
   );
 }
