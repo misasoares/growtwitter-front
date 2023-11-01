@@ -97,8 +97,8 @@ function Sidebar(props: SidebarLineProp) {
         </div>
 
         <ButtonTweetar type="button" action={() => setOpenModal(true)} />
-        <ButtonLogout onClick={deslogar}>sair</ButtonLogout>
-        <IconeStyled imgurl={`https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`}></IconeStyled>
+        <ButtonLogout onClick={deslogar}>Sair</ButtonLogout>
+        <IconeStyled imgurl={userLogado?.iconePerfil ? `https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash` : ""}></IconeStyled>
       </SidebarStyled>
       <Modal addTweet={props.addTweet} isOpen={openModal} tweet={undefined} type="tweet" onClose={() => setOpenModal(false)} />
     </BodySidebar>

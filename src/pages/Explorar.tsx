@@ -11,7 +11,6 @@ import Acontecimeto from "../components/Acontecimento/Acontecimento";
 import axios from "axios";
 import { Body } from "./Home";
 
-
 export interface ArticlesDto {
   author: string;
   content: string;
@@ -30,7 +29,6 @@ export default function Explorar() {
   const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [newsAPI, setNews] = useState<NewsDto | null>();
-
 
   useEffect(() => {
     async function me() {
@@ -62,12 +60,14 @@ export default function Explorar() {
         <h2 style={{ margin: "20px" }}>Explorar</h2>
         <HrStyled />
         <TimeLineStyled>
-          {newsAPI &&
-            newsAPI.articles.map((n, index) => (
-              <div key={index}>
-                <Assuntos link={n.url} subtitulo="Assuntos do momento em Brasil" titulo={n ? n.title : null} />
-              </div>
-            ))}
+          <div style={{ padding: "10px" }}>
+            {newsAPI &&
+              newsAPI.articles.map((n, index) => (
+                <div key={index}>
+                  <Assuntos link={n.url} subtitulo="Assuntos do momento em Brasil" titulo={n ? n.title : null} />
+                </div>
+              ))}
+          </div>
         </TimeLineStyled>
       </BodyTimeline>
       <Acontecimeto />
