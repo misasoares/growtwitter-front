@@ -40,9 +40,9 @@ export default function Timeline({tweets, setarTweets, addTweet}:TimelineProps) 
       navigate("/login");
       return;
     }
+    
     setLoading(true);
 
-    console.log(loading);
 
     async function me() {
       const res = await listMe();
@@ -55,11 +55,11 @@ export default function Timeline({tweets, setarTweets, addTweet}:TimelineProps) 
         alert("Algo deu errado, atualize a página.");
       }
       setarTweets(res.data);
+      setLoading(false);
     }
 
-    console.log(tweets);
 
-    setLoading(false);
+
     me();
     listarTweets();
   }, []);

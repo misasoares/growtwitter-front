@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const apiService = axios.create({
-  baseURL: "http://localhost:3333/",
+  baseURL: "https://api-growtwitter-misael.onrender.com",
 });
 
 export default apiService;
@@ -19,3 +19,5 @@ apiService.interceptors.request.use((config) => {
   config.headers.Authorization = token ? token : "";
   return config;
 });
+
+

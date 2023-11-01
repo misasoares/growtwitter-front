@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Cadastro from "../pages/Cadastro";
 import Perfil from "../pages/Perfil";
+import Explorar from "../pages/Explorar";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,11 @@ const router = createBrowserRouter([
     path: "/perfil",
     element: <Perfil />,
     errorElement: <h1>NOT FOUND</h1>,
-  },
+  },{
+    path:"/explorar",
+    element: <Explorar/>,
+    errorElement:<h1>NOT FOUND</h1>
+  }
 ]);
 
 const RoutesApp: React.FC = () => {

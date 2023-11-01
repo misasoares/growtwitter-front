@@ -4,9 +4,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserDto } from "../../config/services/user.service";
 import logo from "../../images/logo_growtweet.svg";
-import iconePaginaInicialSelecionado from "../../images/icone_pagina inicial_selecionado.svg";
-import iconeExplorar from "../../images/icone_explorar.svg";
-import iconePerfil from "../../images/icone_perfil.svg";
 import { styled } from "styled-components";
 import { TweetDTO } from "../../config/services/tweet.service";
 
@@ -57,7 +54,10 @@ export const IconeStyled = styled.div<{ imgurl: string }>`
 
 interface SidebarLineProp {
   userLogado?: UserDto | null;
-  addTweet: (tweets:TweetDTO)=> void
+  addTweet: (tweets: TweetDTO) => void;
+  iconePgInicial: string;
+  iconeExplorar: string;
+  iconePerfil: string;
 }
 
 function Sidebar(props: SidebarLineProp) {
@@ -86,13 +86,13 @@ function Sidebar(props: SidebarLineProp) {
         <div>
           <img src={logo} alt="icone growtweet" />
           <p onClick={() => navigate("/")}>
-            <img src={iconePaginaInicialSelecionado} alt="icone pagina inicial selecionado" /> Página Inicial
+            <img src={props.iconePgInicial} alt="icone pagina inicial selecionado" /> Página Inicial
           </p>
           <p onClick={() => navigate("/explorar")}>
-            <img src={iconeExplorar} alt="icone explorar" /> Explorar
+            <img src={props.iconeExplorar} alt="icone explorar" /> Explorar
           </p>
           <p onClick={() => navigate("/perfil")}>
-            <img src={iconePerfil} alt="icone perfil" /> Perfil
+            <img src={props.iconePerfil} alt="icone perfil" /> Perfil
           </p>
         </div>
 

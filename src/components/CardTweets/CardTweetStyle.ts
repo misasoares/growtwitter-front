@@ -23,9 +23,17 @@ export const SmallIconeStyled = styled(IconeStyled)`
 export const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 97%;
 `;
 
 export const FlexContainer = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
 `;
+
+// export const FlexDiv = styled.div`
+//   display: flex;
+//   align-items: center;
+//   margin: 0;
+// `;

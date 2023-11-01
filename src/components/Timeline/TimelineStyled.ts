@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const BodyTimeline = styled.div`
   border: 2px solid #e0e0e0;
   width: 60%;
+  font-size: 0%.8;
 `;
 
 export const TimeLineStyled = styled.div`

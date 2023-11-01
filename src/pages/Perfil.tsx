@@ -7,6 +7,11 @@ import { BodyTimeline, HrStyled } from "../components/Timeline/Timeline";
 import CardTweet from "../components/CardTweets/CardTweet";
 import { UserDto, listMe } from "../config/services/user.service";
 import Sidebar from "../components/Sidebar/Sidebar";
+import iconeExplorar from "../images/icone_explorar.svg";
+import iconepaginaInicial from "../images/icone_pagina inicial.svg";
+import iconePerfilSelecionado from "../images/icone_perfil_selecionado.svg";
+import Acontecimeto from "../components/Acontecimento/Acontecimento";
+import { Body } from "./Home";
 
 export const IconeStyled = styled.div<{ imgurl: string }>`
   width: 70px;
@@ -55,15 +60,15 @@ function Perfil() {
     listarTweets();
   }, []);
 
-  function addTweet(tweet:TweetDTO){
-    setTweets([tweet,...tweets])
+  function addTweet(tweet: TweetDTO) {
+    setTweets([tweet, ...tweets]);
   }
 
   const tweetsDoUsuario = tweets.filter((tweet: TweetDTO) => tweet.User.id === userLogado?.id);
 
   return (
-    <>
-      <Sidebar addTweet={addTweet} userLogado={userLogado} />
+    <Body>
+      <Sidebar iconeExplorar={iconeExplorar} iconePerfil={iconePerfilSelecionado} iconePgInicial={iconepaginaInicial} addTweet={addTweet} userLogado={userLogado} />
       <BodyTimeline>
         {loading ? (
           <>
@@ -94,7 +99,8 @@ function Perfil() {
           </div>
         )}
       </BodyTimeline>
-    </>
+      <Acontecimeto />
+    </Body>
   );
 }
 export default Perfil;
