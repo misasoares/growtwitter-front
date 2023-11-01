@@ -12,6 +12,7 @@ import iconepaginaInicial from "../images/icone_pagina inicial.svg";
 import iconePerfilSelecionado from "../images/icone_perfil_selecionado.svg";
 import Acontecimeto from "../components/Acontecimento/Acontecimento";
 import { Body } from "./Home";
+import { TimeLineStyled } from "../components/Timeline/TimelineStyled";
 
 export const IconeStyled = styled.div<{ imgurl: string }>`
   width: 70px;
@@ -70,6 +71,7 @@ function Perfil() {
     <Body>
       <Sidebar iconeExplorar={iconeExplorar} iconePerfil={iconePerfilSelecionado} iconePgInicial={iconepaginaInicial} addTweet={addTweet} userLogado={userLogado} />
       <BodyTimeline>
+        <TimeLineStyled>
         {loading ? (
           <>
             <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
@@ -98,6 +100,7 @@ function Perfil() {
             </div>
           </div>
         )}
+        </TimeLineStyled>
       </BodyTimeline>
       <Acontecimeto />
     </Body>

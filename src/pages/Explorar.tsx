@@ -57,9 +57,9 @@ export default function Explorar() {
     <Body>
       <Sidebar iconePerfil={iconePerfil} iconePgInicial={iconepaginaInicial} iconeExplorar={iconeExplorarSelecionado} addTweet={addTweet} userLogado={userLogado} />
       <BodyTimeline>
-        <h2 style={{ margin: "20px" }}>Explorar</h2>
-        <HrStyled />
         <TimeLineStyled>
+          <h2 style={{ margin: "20px" }}>Explorar</h2>
+          <HrStyled />
           <div style={{ padding: "10px" }}>
             {newsAPI &&
               newsAPI.articles.map((n, index) => (
