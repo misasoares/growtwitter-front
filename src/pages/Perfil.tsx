@@ -55,11 +55,15 @@ function Perfil() {
     listarTweets();
   }, []);
 
+  function addTweet(tweet:TweetDTO){
+    setTweets([tweet,...tweets])
+  }
+
   const tweetsDoUsuario = tweets.filter((tweet: TweetDTO) => tweet.User.id === userLogado?.id);
 
   return (
     <>
-      <Sidebar userLogado={userLogado} />
+      <Sidebar addTweet={addTweet} userLogado={userLogado} />
       <BodyTimeline>
         {loading ? (
           <>
