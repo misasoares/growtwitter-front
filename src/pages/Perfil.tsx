@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Box, CircularProgress } from "@mui/material";
 import { TweetDTO, list } from "../config/services/tweet.service";
-import { BodyTimeline, HrStyled } from "../components/Timeline/Timeline";
 import CardTweet from "../components/CardTweets/CardTweet";
 import { UserDto, listMe } from "../config/services/user.service";
 import Sidebar from "../components/Sidebar/Sidebar";
@@ -11,8 +10,8 @@ import iconeExplorar from "../images/icone_explorar.svg";
 import iconepaginaInicial from "../images/icone_pagina inicial.svg";
 import iconePerfilSelecionado from "../images/icone_perfil_selecionado.svg";
 import Acontecimeto from "../components/Acontecimento/Acontecimento";
-import { Body } from "./Home";
-import { TimeLineStyled } from "../components/Timeline/TimelineStyled";
+import { Body, ButtonNav } from "./Home";
+import { BodyTimeline, HrStyled, TimeLineStyled } from "../components/Timeline/TimelineStyled";
 
 export const IconeStyled = styled.div<{ imgurl: string }>`
   width: 70px;
@@ -34,6 +33,7 @@ function Perfil() {
   const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [loading, setLoading] = useState(false);
+  const [hideNav, setHideNav] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -69,37 +69,38 @@ function Perfil() {
 
   return (
     <Body>
-      <Sidebar iconeExplorar={iconeExplorar} iconePerfil={iconePerfilSelecionado} iconePgInicial={iconepaginaInicial} addTweet={addTweet} userLogado={userLogado} />
+      <ButtonNav onClick={() => setHideNav(!hideNav)}>...</ButtonNav>
+      <Sidebar hide={hideNav} iconeExplorar={iconeExplorar} iconePerfil={iconePerfilSelecionado} iconePgInicial={iconepaginaInicial} addTweet={addTweet} userLogado={userLogado} />
       <BodyTimeline>
         <TimeLineStyled>
-        {loading ? (
-          <>
-            <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
-              <CircularProgress />
-            </Box>
-          </>
-        ) : (
-          <div style={{ paddingLeft: "15px" }}>
-            <h2 style={{ marginBottom: "0" }}>Perfil de {userLogado?.username}</h2>
-            <p style={{ margin: "0 0 10px 0", padding: "0" }}>{tweetsDoUsuario.length} tweets.</p>
-            <IconeStyled imgurl={`https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`}></IconeStyled>
-            <h3 style={{ marginBottom: "0" }}>{userLogado?.name}</h3>
-            <p style={{ marginTop: "0" }}>
-              <strong>{userLogado?.username}</strong>
-            </p>
+          {loading ? (
+            <>
+              <Box sx={{ display: "flex", position: "absolute", left: "43%", top: "50%" }}>
+                <CircularProgress />
+              </Box>
+            </>
+          ) : (
+            <div style={{ paddingLeft: "15px", paddingRight: "15px" }}>
+              <h2 style={{ marginBottom: "0" }}>Perfil de {userLogado?.username}</h2>
+              <p style={{ margin: "0 0 10px 0", padding: "0" }}>{tweetsDoUsuario.length} tweets.</p>
+              <IconeStyled imgurl={`https://www.gravatar.com/avatar/${userLogado?.iconePerfil}?d=robohash`}></IconeStyled>
+              <h3 style={{ marginBottom: "0" }}>{userLogado?.name}</h3>
+              <p style={{ marginTop: "0" }}>
+                <strong>{userLogado?.username}</strong>
+              </p>
 
-            <div style={{ border: "1px solid #bbbbbb", borderRadius: "10px", padding: "10px" }}>
-              {tweetsDoUsuario.map((t, index) => (
-                <div key={index}>
-                  <div style={{ margin: "10px" }}>
-                    <CardTweet iconePerfilUser={t.User.iconePerfil} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : null} index={index} tweet={t} key={index} />
+              <div style={{ border: "1px solid #bbbbbb", borderRadius: "10px", padding: "10px" }}>
+                {tweetsDoUsuario.map((t, index) => (
+                  <div key={index}>
+                    <div style={{ margin: "10px" }}>
+                      <CardTweet iconePerfilUser={t.User.iconePerfil} iconePerfil={t.originalTweet ? t.originalTweet.User.iconePerfil : null} index={index} tweet={t} key={index} />
+                    </div>
+                    <HrStyled />
                   </div>
-                  <HrStyled />
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
         </TimeLineStyled>
       </BodyTimeline>
       <Acontecimeto />

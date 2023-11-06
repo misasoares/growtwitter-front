@@ -5,20 +5,9 @@ import { UserDto, listMe } from "../../config/services/user.service";
 import Modal from "../Modal/Modal";
 import CardTweet from "../CardTweets/CardTweet";
 import { Box, CircularProgress } from "@mui/material";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { ContainerDiv, PTimelineStyled, TimeLineStyled } from "./TimelineStyled";
+import { BodyTimeline, ContainerDiv, HrStyled, PTimelineStyled, TimeLineStyled } from "./TimelineStyled";
 
-export const BodyTimeline = styled.div`
-  border: 2px solid #e0e0e0;
-  width: 60%;
-`;
-
-export const HrStyled = styled.hr`
-  opacity: 0.5;
-  padding: 0;
-  margin: 0;
-`;
 
 interface TimelineProps{
   tweets : TweetDTO[]
@@ -127,8 +116,7 @@ export default function Timeline({tweets, setarTweets, addTweet}:TimelineProps) 
         </>
       ) : (
         <TimeLineStyled>
-          <h2>Página inicial</h2>
-          {/* fazer acordion para clicar nos tweets e mostrar os retweets de determinado tweet */}
+          <h2 style={{textAlign:'center'}}>Página inicial</h2>
           <HrStyled />
           {tweets &&
             tweets.map((t, index) => (

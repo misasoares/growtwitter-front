@@ -12,6 +12,9 @@ const BodyAcontecimentos = styled.div`
   border-radius: 30px 30px 30px 30px;
   overflow: hidden;
   font-size: 0%.8;
+  @media (max-width:600px){
+    display: none;
+  }
 `;
 
 export default function Acontecimeto() {

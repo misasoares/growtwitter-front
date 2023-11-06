@@ -9,7 +9,7 @@ import Assuntos from "../components/Assuntos/Assuntos";
 import { BodyTimeline, HrStyled, TimeLineStyled } from "../components/Timeline/TimelineStyled";
 import Acontecimeto from "../components/Acontecimento/Acontecimento";
 import axios from "axios";
-import { Body } from "./Home";
+import { Body, ButtonNav } from "./Home";
 
 export interface ArticlesDto {
   author: string;
@@ -29,6 +29,7 @@ export default function Explorar() {
   const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
   const [newsAPI, setNews] = useState<NewsDto | null>();
+  const [hideNav, setHideNav] = useState(false);
 
   useEffect(() => {
     async function me() {
@@ -55,7 +56,8 @@ export default function Explorar() {
 
   return (
     <Body>
-      <Sidebar iconePerfil={iconePerfil} iconePgInicial={iconepaginaInicial} iconeExplorar={iconeExplorarSelecionado} addTweet={addTweet} userLogado={userLogado} />
+      <ButtonNav onClick={() => setHideNav(!hideNav)}>...</ButtonNav>
+      <Sidebar hide={hideNav} iconePerfil={iconePerfil} iconePgInicial={iconepaginaInicial} iconeExplorar={iconeExplorarSelecionado} addTweet={addTweet} userLogado={userLogado} />
       <BodyTimeline>
         <TimeLineStyled>
           <h2 style={{ margin: "20px" }}>Explorar</h2>

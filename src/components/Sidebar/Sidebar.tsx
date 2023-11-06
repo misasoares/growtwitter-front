@@ -7,10 +7,28 @@ import logo from "../../images/logo_growtweet.svg";
 import { styled } from "styled-components";
 import { TweetDTO } from "../../config/services/tweet.service";
 
-const BodySidebar = styled.div`
+interface SidebarLineProp {
+  userLogado?: UserDto | null;
+  addTweet: (tweets: TweetDTO) => void;
+  iconePgInicial: string;
+  iconeExplorar: string;
+  iconePerfil: string;
+  hide: boolean
+}
+
+const BodySidebar = styled.div<{hide:boolean}>`
   display: flex;
   height: 100vh;
   align-self: flex-start;
+  transform: translateX(${props => props.hide ? '-100%' : '0'});
+  transition: transform 0.3s ease-in-out;
+  @media (max-width:500px) {
+    display: flex; 
+    position: absolute; 
+    width: 80%; 
+    z-index: 10;
+  
+  }
 `;
 
 const SidebarStyled = styled.div`
@@ -21,7 +39,15 @@ const SidebarStyled = styled.div`
   background-color: #f2f2f2;
   min-width: 15vw;
   max-width: 20vw;
+  padding: 30px 0 0 0;
   align-items: center;
+  @media (max-width:500px) {
+    padding: 50px 0 0 0;
+    min-width: 40vw;
+    width: 80%; 
+    z-index: 10;
+  
+  }
 `;
 
 const ButtonLogout = styled.button`
@@ -52,13 +78,7 @@ export const IconeStyled = styled.div<{ imgurl: string }>`
   bottom: 50px;
 `;
 
-interface SidebarLineProp {
-  userLogado?: UserDto | null;
-  addTweet: (tweets: TweetDTO) => void;
-  iconePgInicial: string;
-  iconeExplorar: string;
-  iconePerfil: string;
-}
+
 
 function Sidebar(props: SidebarLineProp) {
   const navigate = useNavigate();
@@ -81,7 +101,7 @@ function Sidebar(props: SidebarLineProp) {
   }
 
   return (
-    <BodySidebar>
+    <BodySidebar hide={props.hide}>
       <SidebarStyled>
         <div>
           <img src={logo} alt="icone growtweet" />

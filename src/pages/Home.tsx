@@ -14,11 +14,28 @@ export const Body = styled.div`
   width: 100vw;
   height: 100vh;
   justify-content: space-between;
-`
+`;
+
+export const ButtonNav = styled.button`
+  display: none;
+  @media (max-width: 500px) {
+    width: 60px;
+    height: 30px;
+    position: absolute;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    z-index: 11;
+  }
+`;
 
 function Home() {
   const [userLogado, setUserLogado] = useState<UserDto | null>();
   const [tweets, setTweets] = useState<TweetDTO[]>([]);
+  const [hideNav, setHideNav] = useState(false);
 
   useEffect(() => {
     async function me() {
@@ -38,7 +55,8 @@ function Home() {
 
   return (
     <Body>
-      <Sidebar iconePgInicial={iconepaginaInicialSelecionado} iconeExplorar={iconeExplorar} iconePerfil={iconePerfil} addTweet={addTweet} userLogado={userLogado} />
+      <ButtonNav onClick={() => setHideNav(!hideNav)}>...</ButtonNav>
+      <Sidebar hide={hideNav} iconePgInicial={iconepaginaInicialSelecionado} iconeExplorar={iconeExplorar} iconePerfil={iconePerfil} addTweet={addTweet} userLogado={userLogado} />
       <Timeline addTweet={addTweet} tweets={tweets} setarTweets={setarTweets} />
       <Acontecimeto />
     </Body>
